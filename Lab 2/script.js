@@ -1,24 +1,23 @@
 /*
  2 pts) 1. Staircase: write a function that takes in an integer n and prints out a staircase to the console like this (for n=4):
- 
+
  It should be able to handle any n up to 50. If n is greater than 50, the function should print the string "Not available".
  */
 
 console.log("#1");
 function staircase(n) {
-  
+
   if (n > 50) {
     console.log("Not available.");
     throw new Error("Not available. Your integer n is greater than 50.");
   }
-  
+
   if (n == 1) {
-    console.log(' '.repeat(n) + '#');
+    console.log("#");
   }
   else {
-    //noinspection JSDuplicatedDeclaration
     for (var i = 0; i <= n; i++) {
-      console.log(' '.repeat(n - i) + "#" + ':'.repeat(i));
+      console.log(" ".repeat(n - i) + "#" + ":".repeat(i));
     }
   }
 }
@@ -27,9 +26,9 @@ staircase(3);
 
 /*
  3 pts) 2. Read the following on arrays http://www.w3schools.com/js/js_arrays.asp. Write a function that takes an array of  integers, and a positive integer, n. The function finds the number of  pairs (i,j) in the array where i < j and  i + j  is evenly divisible by n. Call the function with a sample array and n, and console.log the result. Note: brute force is ok.
- 
+
  Sample Input
- 
+
  n = 3
  [1, 3, 2, 6, 1, 2]
  Sample Output 5
@@ -37,18 +36,18 @@ staircase(3);
 
 console.log("\n#2\n ");
 function divide(n) {
-  
+
   var array = [1, 3, 2, 6, 1, 2];
   var result = 0;
-  
+
   for (var i = 0; i < array.length; i++) {
     for (var j = 0; j < array.length; j++) {
       if (i != j) {
         var sum = (array[i] + array[j]);
         if (array[i] < array[j] && (sum % n == 0)) {
-          result += 1;
+          result++;
         }
-        
+
       }
     }
   }
@@ -62,10 +61,10 @@ divide(3);
 
 console.log("\n#3\n");
 function pairs(n) {
-  
+
   var array = [1, 3, 2, 6, 1, 2];
   var counter = 0;
-  
+
   for (var i = 0; i < array.length; i++) {
     for (var j = 0; j < array.length; j++) {
       var sum = (array[i] + array[j]);
