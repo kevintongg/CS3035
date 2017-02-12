@@ -32,6 +32,8 @@ var monster = function(name, health, prize) {
   prize = prize
 };
 
+document.write("hello!");
+
 map[1][2] = monster("prize",100,"trophy");
 
 document.write("hello"+map[1][2]["name"]);
