@@ -13,9 +13,9 @@ var hitPoints = 23;
 
 var printMap = function(map) {
   for (var i = 0; i < map.length; i++) {
-    document.write("_");
+    // document.write("_");
     for (var j = 0; j < map[i].length; j++) {
-      map[i][j] = "_";
+      map[i][j] = "___ ";
       document.write(map[i][j]);
     }
     document.write("</br>");
@@ -50,7 +50,7 @@ var adventurer = function(health, position, prize) {
   prize = prizes[Math.floor(Math.random() * prizes.length)];
 }
 
-var prizes = ["Invisibility Potion", "Excalibur (Sword)", "Sword of a Thousand Truths", "Lambent Light (Rapier)" , "Elucidator (Sword)", "Dark Repulsor (Sword)", "Titanium Exoskeleton"]
+var prizes = ["Invisibility Potion", "Excalibur (Sword)", "Sword of a Thousand Truths (Sword)", "Lambent Light (Rapier)" , "Elucidator (Sword)", "Dark Repulsor (Sword)", "Titanium Exoskeleton (Armor)"];
 
 function damageCalculator() {
     var x = Math.floor((Math.random() * 10) + 1);
@@ -64,5 +64,9 @@ document.write("hello!");
 
 map[1][2] = monster("prize",100,"trophy");
 map[4][4] = adventurer(hitPoints, location(), randomPrize(prizes));
+
+map[1][1] = "S";
+
+document.write(map[1][1]);
 
 document.write("hello"+map[1][2]["name"]);
