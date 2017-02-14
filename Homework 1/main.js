@@ -33,7 +33,7 @@ var monster = function(name, health, prize) {
   name = name;
   health = health;
   prize = prize;
-};
+}
 
 // var location = function(position) {
 //   position = map[Math.floor(Math.random() * map.length)][Math.floor(Math.random() * map.length)];

@@ -9,10 +9,17 @@ var map = [
 [" "," "," "," "," "," "," "," "]
 ]
 
+// var map = [[]];
+
+// map[1][1] = new monster(randomElement(monsters), randomHealth(1,35), randomElement(priz));
+map[1][2] = "123";
+map[6][4] = "Start";
+// map[7][7] = new monster();
+
 function printMap(map) {
   for (var i = 0; i < map.length; i++) {
     for (var j = 0; j < map[i].length; j++) {
-      map[i][j] = "_____ ";
+      document.write(" ");
       document.write(map[i][j]);
     }
     document.write("</br>");
@@ -22,7 +29,8 @@ function printMap(map) {
 printMap(map);
 
 var hitPoints = 23;
-var prizes = ["Invisibility Potion", "Excalibur (Sword)", "Sword of a Thousand Truths (Sword)", "Lambent Light (Rapier)" , "Elucidator (Sword)", "Dark Repulsor (Sword)", "Titanium Exoskeleton (Armor)"];
+var monsters = ["Kel'thuzad", "Kael'thas Sunstrider", "Arthas Menethil", "Deathwing", "Garrosh Hellscream", "Archimonde", "Gul'dan"];
+var prizes = ["Invisibility Potion (Potion)", "Excalibur (Sword)", "Sword of a Thousand Truths (Sword)", "Lambent Light (Rapier)" , "Elucidator (Sword)", "Dark Repulsor (Sword)", "Titanium Exoskeleton (Armor)"];
 
 var adventurer = function(health, position, prize) {
   health = health;
@@ -30,14 +38,31 @@ var adventurer = function(health, position, prize) {
   prize = prize;
 }
 
+// var monster = function(name, health, prize) {
+//   name = randomElement(monsters);
+//   health = randomNumber(1, 35);
+//   prize = randomElement(prizes);
+// }
+
+var monster = function(name, health, prize) {
+  name = name;
+  health = health;
+  prize = prize;
+}
+
+
+function randomHealth(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function randomElement(array) {
+  var random = array[Math.floor(Math.random() * array.length)];
+  return random;
+}
+
 function randomPosition() {
   var position = (Math.floor(Math.random() * (map.length * map[0].length)));
   return position;
-}
-
-function randomPrize() {
-  var prize = prizes[Math.floor(Math.random() * prizes.length)];
-  return prize;
 }
 
 function damageCalculator() {
@@ -45,8 +70,3 @@ function damageCalculator() {
 }
 
 map[6][4] = new adventurer(hitPoints, randomPosition(), randomPrize());
-
-if (map[6][4] != null || map[6][4] != undefined) {
-  map[6][4] = "S";
-  document.write()
-}
