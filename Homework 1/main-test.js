@@ -30,7 +30,7 @@ printMap(map);
 
 var hitPoints = 23;
 var monsters = ["Kel'thuzad", "Kael'thas Sunstrider", "Arthas Menethil", "Deathwing", "Garrosh Hellscream", "Archimonde", "Gul'dan"];
-var prizes = ["Invisibility Potion (Potion)", "Excalibur (Sword)", "Sword of a Thousand Truths (Sword)", "Lambent Light (Rapier)" , "Elucidator (Sword)", "Dark Repulsor (Sword)", "Titanium Exoskeleton (Armor)"];
+var prizes = ["Invisibility Potion (Potion)", "Excalibur (Sword)", "Sword of a Thousand Truths (Sword)", "Lambent Light (Rapier)" , "Elucidator (Sword)", "Dark Repulsor (Sword)", "Titanium Exoskeleton (Armor)", "Purple Floppyslapper (Bludgeon)"];
 
 var adventurer = function(health, position, prize) {
   health = health;
