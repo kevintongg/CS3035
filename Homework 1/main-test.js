@@ -247,12 +247,10 @@ function fight() {
     case "y":
       var randomEnemy = randomElement(monsters);
       alert(randomEnemy + " has appeared!");
-      var health = randomHealth(10, 20);
-      while (health != 0) {
-        alert(randomEnemy + " has " + health + "!");
-        health -= damageCalculator();
-        alert(randomEnemy + " now has " + health + "!");
-      }
+      alert("You strike " + randomEnemy + ".");
+      alert(randomEnemy + " has died!");
+      monsters.splice(monsters.indexOf(randomEnemy), 1);
+      break;
   }
   
 }
@@ -270,7 +268,3 @@ function randomElement(array) {
 //   var column = Math.floor(Math.random() * map.length);
 //   return map[row][column];
 // }
-
-function damageCalculator(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
