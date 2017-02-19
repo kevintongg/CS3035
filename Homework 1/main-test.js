@@ -8,7 +8,7 @@ var map = [
     "wall",
     "wall",
     "wall"],
-  
+
   // 1,0 1,1 1,2 1,3 1,4 1,5 1,6 1,7
   ["wall",
     "prize",
@@ -18,7 +18,7 @@ var map = [
     " ",
     "prize",
     "wall"],
-  
+
   // 2,0 2,1 2,2 2,3 2,4 2,5 2,6 2,7
   ["wall",
     " ",
@@ -28,7 +28,7 @@ var map = [
     " ",
     " ",
     "wall"],
-  
+
   // 3,0 3,1 3,2 3,3 3,4 3,5 3,6 3,7
   ["wall",
     " ",
@@ -38,7 +38,7 @@ var map = [
     " ",
     " ",
     "wall"],
-  
+
   // 4,0 4,1 4,2 4,3 4,4 4,5 4,6 4,7
   ["wall",
     " ",
@@ -48,7 +48,7 @@ var map = [
     " ",
     " ",
     "wall"],
-  
+
   // 5,0 5,1 5,2 5,3 5,4 5,5 5,6 5,7
   ["wall",
     " ",
@@ -58,7 +58,7 @@ var map = [
     " ",
     " ",
     "wall"],
-  
+
   // 6,0 6,1 6,2 6,3 6,4 6,5 6,6 6,7
   ["wall",
     "prize",
@@ -68,7 +68,7 @@ var map = [
     " ",
     " ",
     "wall"],
-  
+
   // 7,0 7,1 7,2 7,3 7,4 7,5 7,6 7,7
   ["wall",
     "wall",
@@ -106,13 +106,12 @@ var playerPrizes = [];
 var treasure = "";
 var prizeCounter = 0;
 var win = false;
+var visited = false;
 var xCoordinate = 6;
 var yCoordinate = 4;
 var playerPosition = map[xCoordinate][yCoordinate];
 
 // map[1][1] = new monster(randomElement(monsters), randomHealth(1,35), randomElement(prize));
-map[1][2] = "123";
-map[6][4] = "Start";
 // map[7][7] = new monster();
 
 for (var i = 0; i < prizes.length; i++) {
@@ -150,56 +149,58 @@ var monster = {
 game();
 
 function game() {
-  alert("Welcome to the text adventure game!");
-  alert("You are an adventurer who has the ability to defeat any enemy with one hit.");
-  alert("Let's proceed.");
+  // alert("Welcome to the text adventure game!");
+  // alert("You are an adventurer who has the ability to defeat any enemy with one hit.");
+  // alert("Let's proceed.");
   while (!win) {
     move();
     // Prizes if... else
-    if (playerPosition == map[3][3] === "prize") {
+    if (playerPosition == map[3][3] === "prize" && visited == false) {
       alert("Congratulations! You've found some treasure!");
       treasure = randomElement(prizes);
       prizeCounter++;
       playerPrizes.push(treasure);
       map[3][3] = " ";
       prizes.splice(prizes.indexOf(treasure), 1);
-    } else if (playerPosition == map[6][1] === "prize") {
+      visited = true;
+    } else if (prizeChecker() == true && visited == false) {
       alert("Congratulations! You've found some treasure!");
       treasure = randomElement(prizes);
       console.log(treasure);
       prizeCounter++;
       playerPrizes.push(treasure);
-      map[6][1] = " ";
       prizes.splice(prizes.indexOf(treasure), 1);
-    } else if (playerPosition == map[1][6] === "prize") {
+      visited = true;
+    } else if (playerPosition == map[1][6] && visited == false) {
       alert("Congratulations! You've found some treasure!");
       treasure = randomElement(prizes);
       prizeCounter++;
       playerPrizes.push(treasure);
       map[1][6] = " ";
       prizes.splice(prizes.indexOf(treasure), 1);
-    } else if (playerPosition == map[1][1] === "prize") {
+      visited = true;
+    } else if (playerPosition == map[1][1] && visited == false) {
       alert("Congratulations! You've found some treasure!");
       treasure = randomElement(prizes);
       prizeCounter++;
       playerPrizes.push(treasure);
       map[1][1] = " ";
       prizes.splice(prizes.indexOf(treasure), 1);
+      visited = true;
     }
     for (var i = 0; i < playerPrizes.length; i++) {
-      console.log(playerPrizes[i]);
+      console.log("Your current treasures: " + playerPrizes[i]);
     }
-    
+
     // Monsters if... else
     if (playerPosition == map[1][2] === "monster") {
-      
+
     }
   }
 }
 
 function move() {
-  var choice = "";
-  choice = prompt("Where would you like to move?\n N for north\n E for east\n S for south\n W for west");
+  var choice = prompt("Where would you like to move?\n N for north\n E for east\n S for south\n W for west");
   console.log(choice);
   switch (choice) {
     case "n":
@@ -214,6 +215,7 @@ function move() {
     case "e":
       xCoordinate++;
       if (xCoordinate >= 7) {
+        alert("You've hit a wall!");
         xCoordinate--;
         playerPosition = map[xCoordinate][yCoordinate];
       }
@@ -222,6 +224,7 @@ function move() {
     case "s":
       yCoordinate++;
       if (yCoordinate >= 7) {
+        alert("You've hit a wall!");
         yCoordinate--;
         playerPosition = map[xCoordinate][yCoordinate];
       }
@@ -230,6 +233,7 @@ function move() {
     case "w":
       xCoordinate--;
       if (xCoordinate <= 0) {
+        alert("You've hit a wall!");
         xCoordinate++;
         playerPosition = map[xCoordinate][yCoordinate];
       }
@@ -241,8 +245,7 @@ function move() {
 }
 
 function fight() {
-  var choice = "";
-  choice = prompt(randomElement(fightMessages) + "\n Would you like to fight?\n\n y for Yes\n n for No");
+  var choice = prompt(randomElement(fightMessages) + "\n Would you like to fight?\n\n y for Yes\n n for No");
   switch (choice) {
     case "y":
       var randomEnemy = randomElement(monsters);
@@ -251,8 +254,10 @@ function fight() {
       alert(randomEnemy + " has died!");
       monsters.splice(monsters.indexOf(randomEnemy), 1);
       break;
+    case "n":
+      alert("You have ran away from the enemy!");
   }
-  
+
 }
 
 function randomHealth(min, max) {
@@ -263,8 +268,9 @@ function randomElement(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-// function randomPosition() {
-//   var row = Math.floor(Math.random() * map.length);
-//   var column = Math.floor(Math.random() * map.length);
-//   return map[row][column];
-// }
+function prizeChecker() {
+  if (playerPosition == map[6][1] && map[6][1] == "prize") {
+    return true;
+  }
+}
+
