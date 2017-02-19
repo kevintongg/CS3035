@@ -11,7 +11,7 @@ let map = [
 
   // 1,0 1,1 1,2 1,3 1,4 1,5 1,6 1,7
   ["wall",
-    "prize",
+    "blank",
     "monster",
     "blank",
     "blank",
@@ -33,7 +33,7 @@ let map = [
   ["wall",
     "blank",
     "blank",
-    "prize",
+    "blank",
     "blank",
     "blank",
     "blank",
@@ -83,10 +83,8 @@ let map = [
 // 4,6 monster
 // 5,3 monster
 // 1,2 monster
-// 3,3 prize
 // 6,1 prize
 // 1,6 prize
-// 1,1 prize
 
 let monsters = ["Kel'thuzad", // 0
   "Kael'thas Sunstrider", // 1
@@ -103,7 +101,7 @@ let prizes = ["Black Ice (Polearm)", // 0
   "Dark Repulser (Sword)", // 5
   "Titanium Exoskeleton (Armor)", // 6
   "Purple Floppyslapper (Bludgeon)"]; // 7
-let info = ["You see something bright. Ooh! Shiny!", // 0
+let messages = ["You see something bright. Ooh! Shiny!", // 0
   "You see a treasure chest. To your surprise, this is the item you have been wanting all your life!", // 1
   "You find an item that could really save your life when you really need it.", // 2
   "You find an interesting item. Hrm. Quite.", // 3
@@ -130,7 +128,7 @@ function Monster(name, health, prize) {
   this.prize = prize;
 }
 
-let adventurer = new Adventurer(playerHealth, 0, [], x, y);
+let adventurer = new Adventurer(playerHealth, 0, [  ], x, y);
 
 let monster1 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes));
 
@@ -162,57 +160,61 @@ function introduction() {
 function clearInfo() {
   document.getElementById("health").innerHTML = "";
   document.getElementById("prizeCounter").innerHTML = "";
-  document.getElementById("prizes").innerHTML = "";
+  document.getElementById("prize1").innerHTML = "";
+  document.getElementById("prize2").innerHTML = "";
   document.getElementById("location").innerHTML = "";
   document.getElementById("info").innerHTML = "";
 }
 
+console.log(map[1][1]);
+
 function outcome() {
-  if ((adventurer.xCoordinate == 3 && adventurer.yCoordinate == 3) && map[adventurer.xCoordinate][adventurer.yCoordinate] == "prize") {
+  if ((adventurer.xCoordinate == 6 && adventurer.yCoordinate == 1) && map[adventurer.xCoordinate][adventurer.yCoordinate] == "prize") {
     let treasure = randomElement(prizes);
-    let message = randomElement(info);
+    let message = randomElement(messages);
     alert(message);
     alert("Obtained: " + treasure);
-    adventurer.prizes.push(treasure);
-    adventurer.prizeCounter++;
-    adventurer.prizes.splice(adventurer.prizes.indexOf(treasure), 1);
-    map[3][3] = "blank";
-    document.getElementById("info").innerHTML = "Our hero found: " + treasure;
-  } else if ((adventurer.xCoordinate == 6 && adventurer.yCoordinate == 1) && map[adventurer.xCoordinate][adventurer.yCoordinate] == "prize") {
-    let treasure = randomElement(prizes);
-    let message = randomElement(info);
-    alert(message);
-    alert("Obtained: " + treasure);
+    for (let i = 0; i <= adventurer.prizes.length; i++) {
+      if (adventurer.prizes[0] == undefined) {
+        adventurer.prizes.push(treasure);
+        break;
+      } else if (adventurer.prizes[1] == undefined) {
+        adventurer.prizes.push(treasure);
+      }
+    }
     adventurer.prizes.push(treasure);
     adventurer.prizeCounter++;
     adventurer.prizes.splice(adventurer.prizes.indexOf(treasure), 1);
     map[6][1] = "blank";
     document.getElementById("info").innerHTML = "Our hero found: " + treasure;
+    console.log(treasure);
+    console.log("prizes: " + adventurer.prizes.length);
   } else if ((adventurer.xCoordinate == 1 && adventurer.yCoordinate == 6) && map[adventurer.xCoordinate][adventurer.yCoordinate] == "prize") {
     let treasure = randomElement(prizes);
-    let message = randomElement(info);
+    let message = randomElement(messages);
     alert(message);
     alert("Obtained: " + treasure);
+    for (let i = 0; i <= adventurer.prizes.length; i++) {
+      if (adventurer.prizes[0] == undefined) {
+        adventurer.prizes.push(treasure);
+        break;
+      } else if (adventurer.prizes[1] == undefined) {
+        adventurer.prizes.push(treasure);
+      }
+    }
     adventurer.prizes.push(treasure);
     adventurer.prizeCounter++;
     adventurer.prizes.splice(adventurer.prizes.indexOf(treasure), 1);
     map[1][6] = "blank";
     document.getElementById("info").innerHTML = "Our hero found: " + treasure;
-  } else if ((adventurer.xCoordinate == 1 && adventurer.yCoordinate == 1) && map[adventurer.xCoordinate][adventurer.yCoordinate] == "prize") {
-    let treasure = randomElement(prizes);
-    let message = randomElement(info);
-    alert(message);
-    alert("Obtained: " + treasure);
-    adventurer.prizes.push(treasure);
-    adventurer.prizeCounter++;
-    adventurer.prizes.splice(adventurer.prizes.indexOf(treasure), 1);
-    map[1][1] = "blank";
-    document.getElementById("info").innerHTML = "Our hero found: " + treasure;
   }
 }
 
+console.log(typeof adventurer.prizes[0]);
+console.log(typeof adventurer.prizes[1]);
+
 function move() {
-  let choice = prompt("Where would you like to move?\n N for north\n E for east\n S for south\n W for west");
+  let choice = prompt("Where would you like to move?\n\n \"n\" for north\n \"e\" for east\n \"s\" for south\n \"w\" for west");
   console.log(choice);
   switch (choice) {
     case "n":
@@ -250,19 +252,19 @@ function move() {
   }
 }
 
-function encounter() {
-  if ((adventurer.xCoordinate == 6 && adventurer.yCoordinate == 2) && map[adventurer.xCoordinate][adventurer.yCoordinate] == "monster") {
-    let mob = randomElement(monsters);
-    let message = randomElement(info);
-    alert(message);
-    alert("Obtained: " + treasure);
-    adventurer.prizes.push(treasure);
-    adventurer.prizeCounter++;
-    adventurer.prizes.splice(adventurer.prizes.indexOf(treasure), 1);
-    map[3][3] = "blank";
-    document.getElementById("info").innerHTML = "Our hero fought: " + treasure;
-  }
-}
+// function encounter() {
+//   if ((adventurer.xCoordinate == 6 && adventurer.yCoordinate == 2) && map[adventurer.xCoordinate][adventurer.yCoordinate] == "monster") {
+//     let mob = randomElement(monsters);
+//     let message = randomElement(info);
+//     alert(message);
+//     alert("Obtained: " + treasure);
+//     adventurer.prizes.push(treasure);
+//     adventurer.prizeCounter++;
+//     adventurer.prizes.splice(adventurer.prizes.indexOf(treasure), 1);
+//     map[3][3] = "blank";
+//     document.getElementById("info").innerHTML = "Our hero fought: " + treasure;
+//   }
+// }
 
 // introduction();
 game();
@@ -274,20 +276,24 @@ game();
 function game() {
   document.getElementById("health").innerHTML = "Your current health: " + adventurer.health;
   document.getElementById("prizeCounter").innerHTML = "Your current number of prizes: " + adventurer.prizeCounter;
-  for (let i = 0; i < adventurer.prizes.length; i++) {
-    document.getElementById("prizes").innerHTML = (i + 1) + ": " + adventurer.prizes[i];
-  }
+  // document.getElementById("prize1").innerHTML = "Your inventory: <br/>" + 1 + ". " + adventurer.prizes[i];
   document.getElementById("location").innerHTML = "Your current position: " + adventurer.xCoordinate + ", " + adventurer.yCoordinate;
   while (activeGame == true) {
     move();
     clearInfo();
     outcome();
+    console.log(typeof adventurer.prizes[0]);
+    console.log(typeof adventurer.prizes[1]);
+    for (let i = 0; i < 2; i++) {
+      console.log((i + 1) + ": " + adventurer.prizes[i]);
+    }
     console.log("Prize array size: " + adventurer.prizes.length);
     document.getElementById("health").innerHTML = "Your current health: " + adventurer.health;
     document.getElementById("prizeCounter").innerHTML = "Your current number of prizes: " + adventurer.prizeCounter;
-    for (let i = 0; i < adventurer.prizes.length; i++) {
-      document.getElementById("prizes").innerHTML = "Your inventory: <br/>" + (i + 1) + ": " + adventurer.prizes[i];
-    }
+    // for (let i = 0; i < 2; i++) {
+    document.getElementById("prize1").innerHTML = "Your inventory: <br/>" + 1 + ". " + adventurer.prizes[0];
+    document.getElementById("prize2").innerHTML = 2 + ". " + adventurer.prizes[1];
+    // }
     document.getElementById("location").innerHTML = "Your current position: " + adventurer.xCoordinate + ", " + adventurer.yCoordinate;
   }
 }
