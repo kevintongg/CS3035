@@ -1,4 +1,4 @@
-var map = [
+let map = [
   // 0,0 0,1 0,2 0,3 0,4 0,5 0,6 0,7
   ["wall",
     "wall",
@@ -13,60 +13,60 @@ var map = [
   ["wall",
     "prize",
     "monster",
-    " ",
-    " ",
-    " ",
+    "nothing",
+    "nothing",
+    "nothing",
     "prize",
     "wall"],
 
   // 2,0 2,1 2,2 2,3 2,4 2,5 2,6 2,7
   ["wall",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
+    "nothing",
+    "nothing",
+    "nothing",
+    "nothing",
+    "nothing",
+    "nothing",
     "wall"],
 
   // 3,0 3,1 3,2 3,3 3,4 3,5 3,6 3,7
   ["wall",
-    " ",
-    " ",
+    "nothing",
+    "nothing",
     "prize",
-    " ",
-    " ",
-    " ",
+    "nothing",
+    "nothing",
+    "nothing",
     "wall"],
 
   // 4,0 4,1 4,2 4,3 4,4 4,5 4,6 4,7
   ["wall",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
+    "nothing",
+    "nothing",
+    "nothing",
+    "nothing",
+    "nothing",
+    "nothing",
     "wall"],
 
   // 5,0 5,1 5,2 5,3 5,4 5,5 5,6 5,7
   ["wall",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
+    "nothing",
+    "nothing",
+    "boss",
+    "nothing",
+    "nothing",
+    "nothing",
     "wall"],
 
   // 6,0 6,1 6,2 6,3 6,4 6,5 6,6 6,7
   ["wall",
     "prize",
-    " ",
-    " ",
-    " ",
-    " ",
-    " ",
+    "nothing",
+    "nothing",
+    "starting space",
+    "nothing",
+    "nothing",
     "wall"],
 
   // 7,0 7,1 7,2 7,3 7,4 7,5 7,6 7,7
@@ -79,198 +79,143 @@ var map = [
     "wall",
     "wall"]
 ];
-
-// 3,3 prize
-// 6,1 prize
-// 1,6 prize
-// 1,1 prize
-
-var hitPoints = 23;
-var monsters = ["Kel'thuzad", // 0
+let monsters = ["Kel'thuzad", // 0
   "Kael'thas Sunstrider", // 1
   "Arthas Menethil", // 2
   "Deathwing", // 3
   "Garrosh Hellscream", // 4
   "Archimonde", // 5
   "Gul'dan"]; // 6
-var prizes = ["Invisibility Potion (Potion)", // 0
+let prizes = ["Black Ice (Polearm)", // 0
   "Excalibur (Sword)", // 1
   "Sword of a Thousand Truths (Sword)", // 2
   "Lambent Light (Rapier)", // 3
   "Elucidator (Sword)", // 4
-  "Dark Repulsor (Sword)", // 5
+  "Dark Repulser (Sword)", // 5
   "Titanium Exoskeleton (Armor)", // 6
   "Purple Floppyslapper (Bludgeon)"]; // 7
-var fightMessages = ["You've found something that wants to fight you!", "A wild mob has appeared!", "You've found something peculiar. It turns out to be an enemy!"];
-var playerPrizes = [];
-var treasure = "";
-var prizeCounter = 0;
-var win = false;
-var visited = false;
-var xCoordinate = 6;
-var yCoordinate = 4;
-var playerPosition = map[xCoordinate][yCoordinate];
+let playerHealth = 23;
+let prizeList = [];
+let x = 6;
+let y = 4;
+let playerPosition = map[x][y];
+let activeGame = true;
 
-// map[1][1] = new monster(randomElement(monsters), randomHealth(1,35), randomElement(prize));
-// map[7][7] = new monster();
 
-for (var i = 0; i < prizes.length; i++) {
-  console.log((i + 1) + ". " + prizes[i]);
+function Adventurer(health, position, prizeCounter, prizes, xCoordinate, yCoordinate) {
+  this.health = health;
+  this.prizeCounter = prizeCounter;
+  this.prizes = [];
+  // Initially starting at 6, 4
+  this.xCoordinate = xCoordinate;
+  this.yCoordinate = yCoordinate;
 }
 
-function printMap(map) {
-  for (var i = 0; i < map.length; i++) {
-    for (var j = 0; j < map[i].length; j++) {
-      if (map[i][j] === " ") {
-        map[i][j] = "blank";
-      }
-      document.write(" ");
-      document.write(map[i][j]);
-    }
-    document.write("</br>");
-  }
+function Monster(name, health, prize) {
+  this.name = name;
+  this.health = health;
+  this.prize = prize;
 }
 
-printMap(map);
 
-var adventurer = {
-  health: hitPoints,
-  position: playerPosition,
-  prize: playerPrizes,
-  numberOfPrizes: prizeCounter
-};
-
-var monster = {
-  name: randomElement(monsters),
-  health: randomHealth(1, 20),
-  prize: randomElement(prizes)
-};
-
-game();
-
-function game() {
-  // alert("Welcome to the text adventure game!");
-  // alert("You are an adventurer who has the ability to defeat any enemy with one hit.");
-  // alert("Let's proceed.");
-  while (!win) {
-    move();
-    // Prizes if... else
-    if (playerPosition == map[3][3] === "prize" && visited == false) {
-      alert("Congratulations! You've found some treasure!");
-      treasure = randomElement(prizes);
-      prizeCounter++;
-      playerPrizes.push(treasure);
-      map[3][3] = " ";
-      prizes.splice(prizes.indexOf(treasure), 1);
-      visited = true;
-    } else if (prizeChecker() == true && visited == false) {
-      alert("Congratulations! You've found some treasure!");
-      treasure = randomElement(prizes);
-      console.log(treasure);
-      prizeCounter++;
-      playerPrizes.push(treasure);
-      prizes.splice(prizes.indexOf(treasure), 1);
-      visited = true;
-    } else if (playerPosition == map[1][6] && visited == false) {
-      alert("Congratulations! You've found some treasure!");
-      treasure = randomElement(prizes);
-      prizeCounter++;
-      playerPrizes.push(treasure);
-      map[1][6] = " ";
-      prizes.splice(prizes.indexOf(treasure), 1);
-      visited = true;
-    } else if (playerPosition == map[1][1] && visited == false) {
-      alert("Congratulations! You've found some treasure!");
-      treasure = randomElement(prizes);
-      prizeCounter++;
-      playerPrizes.push(treasure);
-      map[1][1] = " ";
-      prizes.splice(prizes.indexOf(treasure), 1);
-      visited = true;
-    }
-    for (var i = 0; i < playerPrizes.length; i++) {
-      console.log("Your current treasures: " + playerPrizes[i]);
-    }
-
-    // Monsters if... else
-    if (playerPosition == map[1][2] === "monster") {
-
+function Outcome() {
+  return {
+    result: function () {
+      // if (adventurer.xCoordinate == )
     }
   }
 }
 
-function move() {
-  var choice = prompt("Where would you like to move?\n N for north\n E for east\n S for south\n W for west");
-  console.log(choice);
-  switch (choice) {
-    case "n":
-      yCoordinate--;
-      if (yCoordinate <= 0) {
-        alert("You've hit a wall!");
-        yCoordinate++;
-        playerPosition = map[xCoordinate][yCoordinate];
-      }
-      playerPosition = map[xCoordinate][yCoordinate];
-      break;
-    case "e":
-      xCoordinate++;
-      if (xCoordinate >= 7) {
-        alert("You've hit a wall!");
-        xCoordinate--;
-        playerPosition = map[xCoordinate][yCoordinate];
-      }
-      playerPosition = map[xCoordinate][yCoordinate];
-      break;
-    case "s":
-      yCoordinate++;
-      if (yCoordinate >= 7) {
-        alert("You've hit a wall!");
-        yCoordinate--;
-        playerPosition = map[xCoordinate][yCoordinate];
-      }
-      playerPosition = map[xCoordinate][yCoordinate];
-      break;
-    case "w":
-      xCoordinate--;
-      if (xCoordinate <= 0) {
-        alert("You've hit a wall!");
-        xCoordinate++;
-        playerPosition = map[xCoordinate][yCoordinate];
-      }
-      playerPosition = map[xCoordinate][yCoordinate];
-      break;
-    default:
-  }
-  console.log(xCoordinate + ", " + yCoordinate);
-}
+let adventurer = new Adventurer(playerHealth, playerPosition, 0, [], x, y);
 
-function fight() {
-  var choice = prompt(randomElement(fightMessages) + "\n Would you like to fight?\n\n y for Yes\n n for No");
-  switch (choice) {
-    case "y":
-      var randomEnemy = randomElement(monsters);
-      alert(randomEnemy + " has appeared!");
-      alert("You strike " + randomEnemy + ".");
-      alert(randomEnemy + " has died!");
-      monsters.splice(monsters.indexOf(randomEnemy), 1);
-      break;
-    case "n":
-      alert("You have ran away from the enemy!");
-  }
+let monster1 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes));
 
-}
+console.log(adventurer.position);
 
 function randomHealth(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 function randomElement(array) {
-  return array[Math.floor(Math.random() * array.length)];
+  return array[Math.floor((Math.random() * array.length))];
 }
 
-function prizeChecker() {
-  if (playerPosition == map[6][1] && map[6][1] == "prize") {
-    return true;
+function playerDamageCalculator() {
+  return Math.floor((Math.random() * 4) + 1);
+}
+
+function monsterDamageCalculator() {
+  return Math.floor((Math.random() * 5) + 1);
+}
+
+function introduction() {
+  alert("Welcome!");
+  alert("This is a text based game where you must either find the goal with two prizes in hand in order to win or die. Whichever comes first.");
+  alert("Let us proceed.");
+}
+
+function clearInfo() {
+  document.getElementById("health").innerHTML = "";
+  document.getElementById("prizes").innerHTML = "";
+  document.getElementById("location").innerHTML = "";
+}
+
+function move() {
+  let choice = prompt("Where would you like to move?\n N for north\n E for east\n S for south\n W for west");
+  console.log(choice);
+  switch (choice) {
+    case "n":
+      adventurer.yCoordinate--;
+      if (adventurer.yCoordinate == 0) {
+        alert("You've hit a wall! Returning to previous location.");
+        adventurer.yCoordinate++;
+        adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+      }
+      break;
+    case "e":
+      adventurer.xCoordinate++;
+      if (adventurer.xCoordinate >= 7) {
+        alert("You've hit a wall! Returning to previous location.");
+        adventurer.xCoordinate--;
+        adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+      }
+      break;
+    case "s":
+      adventurer.yCoordinate++;
+      if (adventurer.yCoordinate >= 7) {
+        alert("You've hit a wall! Returning to previous location.");
+        adventurer.yCoordinate--;
+        adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+      }
+      break;
+    case "w":
+      adventurer.xCoordinate--;
+      if (adventurer.xCoordinate == 0) {
+        alert("You've hit a wall! Returning to previous location.");
+        adventurer.xCoordinate++;
+        adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+      }
+      break;
   }
 }
 
+console.log(monster1.name + ", " + monster1.prize + monster1.health);
+
+// introduction();
+game();
+
+function game() {
+  document.getElementById("health").innerHTML = "Your current health: " + adventurer.health;
+  document.getElementById("prizeCounter").innerHTML = "Your current number of prizes: " + adventurer.prizeCounter;
+  for (let i = 0; i < adventurer.prizes; i++) {
+    document.getElementById("prizes").innerHTML = (i + 1) + ": " + adventurer.prizes[i] + "<br/>";
+  }
+  document.getElementById("location").innerHTML = "Your current position: " + adventurer.xCoordinate + ", " + adventurer.yCoordinate;
+  while (activeGame == true) {
+    move();
+    clearInfo()
+    document.getElementById("health").innerHTML = "Your current health: " + adventurer.health;
+    document.getElementById("prizes").innerHTML = "Your current number of prizes: " + adventurer.prizeCounter;
+    document.getElementById("location").innerHTML = "Your current position: " + adventurer.xCoordinate + ", " + adventurer.yCoordinate;
+  }
+}
