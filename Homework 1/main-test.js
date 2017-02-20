@@ -24,7 +24,7 @@ let map = [
     "blank",
     "blank",
     "blank",
-    "blank",
+    "potion",
     "blank",
     "blank",
     "wall"],
@@ -105,9 +105,10 @@ let explorationMessages = ["You see something bright. Ooh! Shiny!", // 0
 let encounterMessages = ["You sense a powerful enemy.", // 1
   "You can feel an extraordinary aura.", // 2
   "You have a feeling that this will be one of the hardest fights of your life."]; // 3
-let potionMessages = ["You feel reinvigorated.",
-  "You feel refreshed."];
-let playerHealth = 25;
+let potionMessages = ["You feel reinvigorated.", // 1
+  "You feel refreshed.", // 2
+  "You feel like you could do things you could not do before!"]; // 3
+let playerHealth = 50;
 let x = 6;
 let y = 4;
 let lastX;
@@ -121,6 +122,7 @@ let activeGame = true;
 // 1,6 prize
 // 4,3 potion
 // 3,5 potion
+// 2,4 potion
 
 // Adventurer starts at 6, 4
 function Adventurer(name, health, prizeCounter, prizes, xCoordinate, yCoordinate) {
@@ -132,21 +134,20 @@ function Adventurer(name, health, prizeCounter, prizes, xCoordinate, yCoordinate
   this.yCoordinate = yCoordinate;
 }
 
-function Monster(name, health, prize) {
+function Monster(name, health, prize, alive) {
   this.name = name;
   this.health = health;
   this.prize = prize;
+  this.alive = alive;
 }
 
 let playerName = prompt("What is your name?");
 
 let adventurer = new Adventurer(playerName, playerHealth, 0, [], x, y);
 
-let monster1 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes));
-let monster2 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes));
-let monster3 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes));
-
-console.log(adventurer.position);
+let monster1 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes), true);
+let monster2 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes), true);
+let monster3 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes), true);
 
 function randomHealth(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -165,25 +166,15 @@ function monsterDamageCalculator() {
 }
 
 function potionCalculator() {
-  return Math.floor(Math.random() * 5) + 1;
+  return Math.floor(Math.random() * (15 - 5) + 5);
 }
 
 function introduction() {
   alert("Welcome, " + adventurer.name + "!");
   alert("This is a text based game where you must either find the goal with two prizes in hand in order to win or die. Whichever comes first.");
-  alert("Let us proceed.");
+  alert("Your goal is to defeat all the monsters in this dungeon.");
+  alert("Let us begin.");
 }
-
-function clearInfo() {
-  document.getElementById("health").innerHTML = "";
-  document.getElementById("prizeCounter").innerHTML = "";
-  document.getElementById("inventory").innerHTML = "";
-  document.getElementById("prizes").innerHTML = "";
-  document.getElementById("location").innerHTML = "";
-  document.getElementById("info").innerHTML = "";
-}
-
-console.log(map[1][1]);
 
 function exploration() {
   if ((adventurer.xCoordinate === 6 && adventurer.yCoordinate === 1) && map[adventurer.xCoordinate][adventurer.yCoordinate] === "prize") {
@@ -202,8 +193,6 @@ function exploration() {
     adventurer.prizes.splice(adventurer.prizes.indexOf(treasure), 1);
     map[6][1] = "blank";
     document.getElementById("info").innerHTML = adventurer.name + " found: " + treasure + " at (6, 1)";
-    console.log(treasure);
-    console.log("prizes: " + adventurer.prizes.length);
   } else if ((adventurer.xCoordinate === 1 && adventurer.yCoordinate === 6) && map[adventurer.xCoordinate][adventurer.yCoordinate] === "prize") {
     let treasure = randomElement(prizes);
     let message = randomElement(explorationMessages);
@@ -237,7 +226,6 @@ function exploration() {
 
 function move() {
   let choice = prompt("Where would you like to move?\n\n \"n\" for north\n \"e\" for east\n \"s\" for south\n \"w\" for west");
-  console.log(choice);
   switch (choice) {
     case "n":
       lastY = adventurer.yCoordinate;
@@ -309,6 +297,7 @@ function monsterOne() {
               break;
             }
           }
+          monster1.alive = false;
           map[4][6] = "blank";
           break;
         }
@@ -356,6 +345,7 @@ function monsterTwo() {
               break;
             }
           }
+          monster2.alive = false;
           map[5][3] = "blank";
           break;
         }
@@ -403,6 +393,7 @@ function monsterThree() {
               break;
             }
           }
+          monster3.alive = false;
           map[1][2] = "blank";
           break;
         }
@@ -430,16 +421,12 @@ function potion() {
   adventurer.health += regen;
   let message = randomElement(potionMessages);
   potionMessages.splice(message, 1);
-  alert(adventurer.name + " now has " + adventurer.health + "health!");
+  alert(adventurer.name + " now has " + adventurer.health + " health!");
   document.getElementById("info").innerHTML = adventurer.name + " drank a potion at (" + adventurer.xCoordinate + ", " + adventurer.yCoordinate + ") and gained " + regen + " health";
 }
 
-// introduction();
+introduction();
 game();
-
-// for (let i = 0; i < adventurer.prizes.length; i++) {
-//   console.log(adventurer.prizes[i]);
-// }
 
 function game() {
   document.getElementById("health").innerHTML = "Your current health: " + adventurer.health;
@@ -449,15 +436,16 @@ function game() {
   document.getElementById("location").innerHTML = "Your current position: " + adventurer.xCoordinate + ", " + adventurer.yCoordinate;
   while (activeGame === true) {
     move();
-    setTimeout(clearInfo, 2500);
-    // clearInfo();
     exploration();
     document.getElementById("health").innerHTML = "Your current health: " + adventurer.health;
     document.getElementById("prizeCounter").innerHTML = "Your current number of prizes: " + adventurer.prizeCounter;
     document.getElementById("inventory").innerHTML = "Your inventory: <br/>";
     document.getElementById("prizes").innerHTML = adventurer.prizes.join("<br/>");
     document.getElementById("location").innerHTML = "Your current position: " + adventurer.xCoordinate + ", " + adventurer.yCoordinate;
-    if (adventurer.health <= 0) {
+    if (monster1.alive === false && monster2.alive === false && monster3.alive === false) {
+      alert("You have won!");
+      break;
+    } else if (adventurer.health <= 0) {
       alert("You have died.");
       break;
     }
