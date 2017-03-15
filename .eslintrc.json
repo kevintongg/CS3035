@@ -16,7 +16,8 @@
     "no-plusplus": "off",
     "no-alert": "off",
     "no-unused-vars": "warn",
-    "no-undef": "warn"
+    "no-undef": "warn",
+    "prefer-template": "off"
   },
   "comma-dangle": 0
 }
