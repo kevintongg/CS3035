@@ -1,6 +1,6 @@
 const people = require('./people');
 
-const problemOne = [
+const restaurants = [
   {
     name: 'Maestro\'s Ocean Club',
     price: '$$$$',
@@ -143,5 +143,5 @@ function dataTable(data) {
 }
 
 console.log('Problem 1:');
-console.log(drawTable(centeredTable(problemOne)));
+console.log(drawTable(centeredTable(restaurants)));
 // console.log(drawTable(dataTable(people)));

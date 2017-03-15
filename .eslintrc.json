@@ -14,7 +14,8 @@
     "no-mixed-operators": "off",
     "no-param-reassign": "off",
     "no-plusplus": "off",
-    "no-alert": "off"
+    "no-alert": "off",
+    "no-unused-vars": "warn"
   },
   "comma-dangle": 0
 }
