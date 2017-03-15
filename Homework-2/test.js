@@ -22,16 +22,16 @@ function colWidths(rows) {
 function drawTable(rows) {
   const heights = rowHeights(rows);
   const widths = colWidths(rows);
-  
+
   function drawLine(blocks, lineNo) {
     return blocks.map(block => block[lineNo]).join(' ');
   }
-  
+
   function drawRow(row, rowNum) {
     const blocks = row.map((cell, colNum) => cell.draw(widths[colNum], heights[rowNum]));
     return blocks[0].map((_, lineNo) => drawLine(blocks, lineNo)).join('\n');
   }
-  
+
   return rows.map(drawRow).join('\n');
 }
 
@@ -104,9 +104,15 @@ CenteredTextCell.prototype = Object.create(TextCell.prototype);
 CenteredTextCell.prototype.draw = function (width, height) {
   const result = [];
   for (let i = 0; i < height; i++) {
+    // let line = this.text[i] || '';
     const line = this.text[i] || '';
-    result.push(repeat(' ', ((width - line.length) / 2)) + repeat(line + ((width - line.length) / 2)));
+    result.push(repeat(' ', Math.floor((width - line.length) / 2)) + line + repeat(' ', Math.floor((width - line.length) / 2)));
   }
+
+  // for (let i = 0; i < height; i++) {
+  //   console.log(result.length);
+  //   console.log(typeof result[1]);
+  // }
   return result;
 };
 
@@ -115,8 +121,8 @@ function centeredTable(data) {
   const headers = keys.map(name => new CenteredTextCell(new TextCell(name)));
   const body = data.map(row => keys.map((name) => {
     const value = row[name];
-    if (typeof value === 'number') {
-      return new RTextCell(String(value));
+    if (typeof value === 'string') {
+      return new CenteredTextCell(String(value));
     }
     return new TextCell(String(value));
   }));
@@ -136,5 +142,6 @@ function dataTable(data) {
   return [headers].concat(body);
 }
 
+console.log('Problem 1:');
 console.log(drawTable(centeredTable(problemOne)));
-console.log(drawTable(dataTable(people)));
+// console.log(drawTable(dataTable(people)));
