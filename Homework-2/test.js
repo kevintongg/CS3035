@@ -155,40 +155,41 @@ function borderedTable(data) {
 
 function borderedTableMod(data) {
   const keys = Object.keys(data[0]);
-  const headers = keys.map(name => new UnderlinedCell(new TextCell(name)));
   const body = data.map(row => keys.map((name) => {
     const value = row[name];
-    if (typeof value === 'number') {
+    if (typeof value === 'object' || typeof value === 'Object') {
       return new BorderedCellMod(String(value));
     }
     return new TextCell(String(value));
   }));
-  return [headers].concat(body);
+  return body;
 }
 
-function matrix(data) {
+function objectToTextCells(data) {
   const keys = Object.keys(data[0]);
-  return data.map(row => new TextCell(String(keys.map(name => name + ': ' + row[name]))));
+  return data.map(row => new BorderedCell(String(keys.map(name => (name + ': ' + row[name])).join('\n'))));
 }
 
-function dataTable(data) {
-  const keys = Object.keys(data[0]);
-  const headers = keys.map(name => new UnderlinedCell(new TextCell(name)));
-  const body = data.map(row => keys.map((name) => {
-    const value = row[name];
-    if (typeof value === 'number') {
-      return new RTextCell(String(value));
-    }
-    return new TextCell(String(value));
-  }));
-  return [headers].concat(body);
+function arrayTransform(array, size) {
+  const result = [];
+
+  while (array.length > 0) {
+    result.push(array.slice(0, size));
+    array = array.slice(size);
+  }
+
+  return result;
 }
 
-console.log(matrix(people));
+function rowTransform(data, rowNum) {
+
+}
 
 console.log('Problem 1:\n');
 console.log(drawTable(centeredTable(restaurants)));
 console.log('\nProblem 2:\n');
 console.log(drawTable(borderedTable(restaurants)));
 console.log('\nProblem 5:\n');
-console.log(drawTable(borderedTableMod(people)));
+console.log(drawTable(arrayTransform(objectToTextCells(people), 3)));
+console.log('\nProblem 6:\n');
+console.log(drawTable(arrayTransform(objectToTextCells(people), 3)));
