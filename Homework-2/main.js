@@ -153,11 +153,11 @@ function borderedTable(data) {
   }));
 }
 
-function borderedTableMod(data) {
+function BorderedTableMod(data) {
   const keys = Object.keys(data[0]);
   const body = data.map(row => keys.map((name) => {
     const value = row[name];
-    if (typeof value === 'object' || typeof value === 'Object') {
+    if (typeof value === 'object') {
       return new BorderedCellMod(String(value));
     }
     return new TextCell(String(value));
@@ -181,8 +181,19 @@ function arrayTransform(array, size) {
   return result;
 }
 
-function rowTransform(data, rowNum) {
 
+function getColumn(array, rowNum) {
+  const result = arrayTransform(objectToTextCells(array), 3);
+  return result.map(value => value[rowNum]);
+}
+
+function getRow(array, row) {
+  const initial = arrayTransform(objectToTextCells(array), 3);
+  const result = [];
+  for (let i = 0; i < initial.length; i++) {
+    result.push(array[row][i]);
+  }
+  return result;
 }
 
 console.log('Problem 1:\n');
@@ -192,4 +203,8 @@ console.log(drawTable(borderedTable(restaurants)));
 console.log('\nProblem 5:\n');
 console.log(drawTable(arrayTransform(objectToTextCells(people), 3)));
 console.log('\nProblem 6:\n');
-console.log(drawTable(arrayTransform(objectToTextCells(people), 3)));
+console.log(drawTable(arrayTransform(objectToTextCells(people), 3)).toUpperCase());
+
+// Testing
+console.log('Testing');
+console.log(objectToTextCells(getColumn(people, 2), 3));
