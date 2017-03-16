@@ -1,15 +1,5 @@
-// const people = require('./people');
-
-const restaurants = [
-  {
-    name: 'Maestro\'s Ocean Club',
-    price: '$$$$',
-  },
-  {
-    name: 'Denny\'s',
-    price: '$',
-  },
-];
+const people = require('./people');
+const restaurants = require('./restaurants');
 
 function rowHeights(rows) {
   return rows.map(row => row.reduce((max, cell) => Math.max(max, cell.minHeight()), 0));
@@ -80,7 +70,8 @@ UnderlinedCell.prototype.draw = function (width, height) {
   return this.inner.draw(width, height - 1).concat([repeat('-', width)]);
 };
 
-function RTextCell(text) {
+function RTextCell(inner, text) {
+  this.inner = inner;
   TextCell.call(this, text);
 }
 
@@ -104,44 +95,60 @@ CenteredTextCell.prototype = Object.create(TextCell.prototype);
 CenteredTextCell.prototype.draw = function (width, height) {
   const result = [];
   for (let i = 0; i < height; i++) {
-    const line = this.text[i] === '[object Object]' ? '' : this.text[i];
+    const line = this.text[i] || '';
     result.push(repeat(' ', Math.floor((width - line.length) / 2)) + line + repeat(' ', Math.floor((width - line.length) / 2)));
   }
   return result;
 };
 
-function BorderedCell(inner) {
-  this.inner = inner;
+function BorderedCell(text) {
+  TextCell.call(this, text);
 }
 
-BorderedCell.prototype.minWidth = function () {
-  return this.inner.minWidth();
-};
-
-BorderedCell.prototype.minHeight = function () {
-  return this.inner.minHeight() + 1;
-};
+BorderedCell.prototype = Object.create(TextCell.prototype);
 
 BorderedCell.prototype.draw = function (width, height) {
-  return this.inner.draw(width, height - 1).concat(repeat('-', width).concat(repeat('|', height)));
+  const result = [];
+  // UnderlinedCell.draw(width, height - 1).concat([repeat('-', width)]);
+  result.push(repeat('-', height + 1).concat([repeat('-', width + 2)]));
+  for (let i = 0; i < height; i++) {
+    const line = this.text[i] || '';
+    result.push('| ' + line + repeat(' ', width - line.length) + ' |');
+  }
+  result.push(repeat('-', height + 1).concat([repeat('-', width + 2)]));
+  return result;
 };
 
 function centeredTable(data) {
   const keys = Object.keys(data[0]);
-  const headers = keys.map(name => new CenteredTextCell(new TextCell(name)));
-  const body = data.map(row => keys.map((name) => {
+  return data.map(row => keys.map((name) => {
     const value = row[name];
     if (typeof value === 'string') {
       return new CenteredTextCell(String(value));
     }
     return new TextCell(String(value));
   }));
-  return [headers].concat(body);
 }
 
 function borderedTable(data) {
   const keys = Object.keys(data[0]);
-  const headers = keys.map(name => new BorderedCell(new TextCell(name)));
+  return data.map(row => keys.map((name) => {
+    const value = row[name];
+    if (typeof value === 'string') {
+      return new BorderedCell(String(value));
+    }
+    return new TextCell(String(value));
+  }));
+}
+
+function rowTransform(num) {
+  const result = [];
+  return result;
+}
+
+function dataTable(data) {
+  const keys = Object.keys(data[0]);
+  const headers = keys.map(name => new UnderlinedCell(new TextCell(name)));
   const body = data.map(row => keys.map((name) => {
     const value = row[name];
     if (typeof value === 'number') {
@@ -152,21 +159,9 @@ function borderedTable(data) {
   return [headers].concat(body);
 }
 
-// function dataTable(data) {
-//   const keys = Object.keys(data[0]);
-//   const headers = keys.map(name => new UnderlinedCell(new TextCell(name)));
-//   const body = data.map(row => keys.map((name) => {
-//     const value = row[name];
-//     if (typeof value === 'number') {
-//       return new RTextCell(String(value));
-//     }
-//     return new TextCell(String(value));
-//   }));
-//   return [headers].concat(body);
-// }
-
-console.log('Problem 1:');
+console.log('Problem 1:\n');
 console.log(drawTable(centeredTable(restaurants)));
-console.log('\nProblem 2:');
+console.log('\nProblem 2:\n');
 console.log(drawTable(borderedTable(restaurants)));
-// console.log('\n' + drawTable(dataTable(people)));
+console.log('\nProblem 5:\n');
+// console.log(drawTable(dataTable(people)));
