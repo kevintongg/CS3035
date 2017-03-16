@@ -109,13 +109,25 @@ BorderedCell.prototype = Object.create(TextCell.prototype);
 
 BorderedCell.prototype.draw = function (width, height) {
   const result = [];
-  // UnderlinedCell.draw(width, height - 1).concat([repeat('-', width)]);
-  result.push(repeat('-', height + 1).concat([repeat('-', width + 2)]));
   for (let i = 0; i < height; i++) {
     const line = this.text[i] || '';
     result.push('| ' + line + repeat(' ', width - line.length) + ' |');
   }
-  result.push(repeat('-', height + 1).concat([repeat('-', width + 2)]));
+  return ([repeat('-', width + 4)]).concat(result).concat([repeat('-', width + 4)]);
+};
+
+function BorderedCellMod(text) {
+  TextCell.call(this, text);
+}
+
+BorderedCellMod.prototype = Object.create(TextCell.prototype);
+
+BorderedCellMod.prototype.draw = function (width, height) {
+  const result = [];
+  for (let i = 0; i < height; i++) {
+    const line = this.text[i] || '';
+    result.push('| ' + line + repeat(' ', width - line.length) + ' |');
+  }
   return result;
 };
 
@@ -141,9 +153,22 @@ function borderedTable(data) {
   }));
 }
 
-function rowTransform(num) {
-  const result = [];
-  return result;
+function borderedTableMod(data) {
+  const keys = Object.keys(data[0]);
+  const headers = keys.map(name => new UnderlinedCell(new TextCell(name)));
+  const body = data.map(row => keys.map((name) => {
+    const value = row[name];
+    if (typeof value === 'number') {
+      return new BorderedCellMod(String(value));
+    }
+    return new TextCell(String(value));
+  }));
+  return [headers].concat(body);
+}
+
+function matrix(data) {
+  const keys = Object.keys(data[0]);
+  return data.map(row => new TextCell(String(keys.map(name => name + ': ' + row[name]))));
 }
 
 function dataTable(data) {
@@ -159,9 +184,11 @@ function dataTable(data) {
   return [headers].concat(body);
 }
 
+console.log(matrix(people));
+
 console.log('Problem 1:\n');
 console.log(drawTable(centeredTable(restaurants)));
 console.log('\nProblem 2:\n');
 console.log(drawTable(borderedTable(restaurants)));
 console.log('\nProblem 5:\n');
-// console.log(drawTable(dataTable(people)));
+console.log(drawTable(borderedTableMod(people)));
