@@ -430,6 +430,8 @@ function potion() {
   document.getElementById('info').innerHTML = `${adventurer.name} drank a potion at (${adventurer.xCoordinate}, ${adventurer.yCoordinate}) and gained ${regen} health`;
 }
 
+introduction();
+game();
 
 function game() {
   document.getElementById('health').innerHTML = `Your current health: ${adventurer.health}`;
@@ -445,8 +447,7 @@ function game() {
     document.getElementById('inventory').innerHTML = 'Your inventory: <br/>';
     document.getElementById('prizes').innerHTML = adventurer.prizes.join('<br/>');
     document.getElementById('location').innerHTML = `Your current position: ${adventurer.xCoordinate}, ${adventurer.yCoordinate}`;
-    if ((monster1.alive === false && monster2.alive === false && monster3.alive === false)
-      && adventurer.prizeCounter >= 2) {
+    if ((monster1.alive === false && monster2.alive === false && monster3.alive === false) && adventurer.prizeCounter >= 2) {
       document.getElementById('info').innerHTML = `${adventurer.name} has won the game!`;
       alert('You have won!');
       break;
@@ -457,6 +458,3 @@ function game() {
     }
   }
 }
-
-introduction();
-game();
