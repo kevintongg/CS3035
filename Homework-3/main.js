@@ -1,9 +1,12 @@
 /*
+ * Developed with Firefox
+ *
  * Copyright (C) 2017 Kevin Tong — All Rights Reserved
  *
  * You may not use, distribute or modify this code.
  *
  */
+
 console.log('hello begin');
 $(document).ready(() => {
   console.log('hello after ready');
