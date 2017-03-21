@@ -196,71 +196,56 @@ $(document).ready(() => {
     console.log('hello move');
     // const choice = prompt('Where would you like to move?\n\n "n" for north\n
     // "e" for east\n "s" for south\n "w" for west');
-    // $('.click').click(() => {
-    //   // switch (choice) {
-    //   // change cases to id names
-    //   switch ($(this).attr('id')) {
-    //     case 'north':
-    //       lastX = adventurer.xCoordinate;
-    //       lastY = adventurer.yCoordinate;
-    //       adventurer.yCoordinate--;
-    //       if (adventurer.yCoordinate === 0) {
-    //         alert("You've hit a wall! Returning to previous location.");
-    //         document.getElementById('info').innerHTML = `${adventurer.name} has
-    // hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
-    //         adventurer.yCoordinate++;
-    //         adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
-    //       }
-    //       break;
-    //     case 'east':
-    //       lastX = adventurer.xCoordinate;
-    //       lastY = adventurer.yCoordinate;
-    //       adventurer.xCoordinate++;
-    //       if (adventurer.xCoordinate >= 7) {
-    //         alert("You've hit a wall! Returning to previous location.");
-    //         document.getElementById('info').innerHTML = `${adventurer.name} has
-    // hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
-    //         adventurer.xCoordinate--;
-    //         adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
-    //       }
-    //       break;
-    //     case 'south':
-    //       lastX = adventurer.xCoordinate;
-    //       lastY = adventurer.yCoordinate;
-    //       adventurer.yCoordinate++;
-    //       if (adventurer.yCoordinate >= 7) {
-    //         alert("You've hit a wall! Returning to previous location.");
-    //         document.getElementById('info').innerHTML = `${adventurer.name} has
-    // hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
-    //         adventurer.yCoordinate--;
-    //         adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
-    //       }
-    //       break;
-    //     case 'west':
-    //       lastX = adventurer.xCoordinate;
-    //       lastY = adventurer.yCoordinate;
-    //       adventurer.xCoordinate--;
-    //       if (adventurer.xCoordinate === 0) {
-    //         alert("You've hit a wall! Returning to previous location.");
-    //         document.getElementById('info').innerHTML = `${adventurer.name} has
-    // hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
-    //         adventurer.xCoordinate++;
-    //         adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
-    //       }
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
-    $('#north').click(() => {
-      lastX = adventurer.xCoordinate;
-      lastY = adventurer.yCoordinate;
-      adventurer.yCoordinate--;
-      if (adventurer.yCoordinate === 0) {
-        alert("You've hit a wall! Returning to previous location.");
-        document.getElementById('info').innerHTML = `${adventurer.name} has      hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
-        adventurer.yCoordinate++;
-        adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+    $('.click').click(() => {
+      // switch (choice) {
+      // change cases to id names
+      switch ($(this).attr('id')) {
+        case 'north':
+          lastX = adventurer.xCoordinate;
+          lastY = adventurer.yCoordinate;
+          adventurer.yCoordinate--;
+          if (adventurer.yCoordinate === 0) {
+            alert("You've hit a wall! Returning to previous location.");
+            document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+            adventurer.yCoordinate++;
+            adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+          }
+          break;
+        case 'east':
+          lastX = adventurer.xCoordinate;
+          lastY = adventurer.yCoordinate;
+          adventurer.xCoordinate++;
+          if (adventurer.xCoordinate >= 7) {
+            alert("You've hit a wall! Returning to previous location.");
+            document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+            adventurer.xCoordinate--;
+            adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+          }
+          break;
+        case 'south':
+          lastX = adventurer.xCoordinate;
+          lastY = adventurer.yCoordinate;
+          adventurer.yCoordinate++;
+          if (adventurer.yCoordinate >= 7) {
+            alert("You've hit a wall! Returning to previous location.");
+            document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+            adventurer.yCoordinate--;
+            adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+          }
+          break;
+        case 'west':
+          lastX = adventurer.xCoordinate;
+          lastY = adventurer.yCoordinate;
+          adventurer.xCoordinate--;
+          if (adventurer.xCoordinate === 0) {
+            alert("You've hit a wall! Returning to previous location.");
+            document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+            adventurer.xCoordinate++;
+            adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
+          }
+          break;
+        default:
+          break;
       }
     });
   }
@@ -474,8 +459,7 @@ $(document).ready(() => {
     document.getElementById('inventory').innerHTML = 'Your inventory: <br/>';
     document.getElementById('prizes').innerHTML = adventurer.loot.join('<br/>');
     document.getElementById('location').innerHTML = `Your current position: ${adventurer.xCoordinate}, ${adventurer.yCoordinate}`;
-    while ((monster1.alive === true && monster2.alive === true && monster3.alive === true)
-    && adventurer.prizeCounter <= 2) {
+    while (activeGame === true) {
       move();
       exploration();
       document.getElementById('health').innerHTML = `Your current health: ${adventurer.health}`;

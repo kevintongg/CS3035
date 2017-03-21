@@ -123,11 +123,11 @@ const activeGame = true;
 // 3,5 potion
 
 // Adventurer starts at 6, 4
-function Adventurer(name, health, prizeCounter, prizes, xCoordinate, yCoordinate) {
+function Adventurer(name, health, prizeCounter, loot, xCoordinate, yCoordinate) {
   this.name = name;
   this.health = health;
   this.prizeCounter = prizeCounter;
-  this.prizes = prizes;
+  this.loot = loot;
   this.xCoordinate = xCoordinate;
   this.yCoordinate = yCoordinate;
 }
@@ -142,10 +142,6 @@ function Monster(name, health, prize, alive) {
 const playerName = prompt('What is your name?');
 
 const adventurer = new Adventurer(playerName, playerHealth, 0, [], x, y);
-
-const monster1 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes), true);
-const monster2 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes), true);
-const monster3 = new Monster(randomElement(monsters), randomHealth(10, 15), randomElement(prizes), true);
 
 function randomHealth(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -166,6 +162,13 @@ function monsterDamageCalculator() {
 function potionCalculator() {
   return Math.floor(Math.random() * (15 - 5) + 5);
 }
+
+const monster1 = new Monster(randomElement(monsters), randomHealth(10, 15),
+  randomElement(prizes), true);
+const monster2 = new Monster(randomElement(monsters), randomHealth(10, 15),
+  randomElement(prizes), true);
+const monster3 = new Monster(randomElement(monsters), randomHealth(10, 15),
+  randomElement(prizes), true);
 
 function introduction() {
   alert(`Welcome, ${adventurer.name}!`);
@@ -221,6 +224,8 @@ function move() {
         adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
       }
       break;
+    default:
+      break;
   }
 }
 
@@ -230,9 +235,9 @@ function exploration() {
     const message = randomElement(explorationMessages);
     alert(message);
     alert(`Obtained: ${treasure}`);
-    for (let i = 0; i <= adventurer.prizes.length; i++) {
-      if (adventurer.prizes[i] === undefined) {
-        adventurer.prizes.push(treasure);
+    for (let i = 0; i <= adventurer.loot.length; i++) {
+      if (adventurer.loot[i] === undefined) {
+        adventurer.loot.push(treasure);
         break;
       }
     }
@@ -275,9 +280,9 @@ function monsterOne() {
           alert(`${adventurer.name} has defeated ${monster1.name}!\n\nYou have found: ${monsterTreasure}`);
           alert(`${adventurer.name} put their new item "${monsterTreasure}" into their inventory.`);
           adventurer.prizeCounter++;
-          for (let i = 0; i <= adventurer.prizes.length; i++) {
-            if (adventurer.prizes[i] === undefined) {
-              adventurer.prizes.push(monsterTreasure);
+          for (let i = 0; i <= adventurer.loot.length; i++) {
+            if (adventurer.loot[i] === undefined) {
+              adventurer.loot.push(monsterTreasure);
               break;
             }
           }
@@ -330,9 +335,9 @@ function monsterTwo() {
           alert(`You have defeated ${monster2.name}!\n\nYou have found: ${monsterTreasure}`);
           alert(`You put your new item "${monsterTreasure}" into your inventory.`);
           adventurer.prizeCounter++;
-          for (let i = 0; i <= adventurer.prizes.length; i++) {
-            if (adventurer.prizes[i] === undefined) {
-              adventurer.prizes.push(monsterTreasure);
+          for (let i = 0; i <= adventurer.loot.length; i++) {
+            if (adventurer.loot[i] === undefined) {
+              adventurer.loot.push(monsterTreasure);
               break;
             }
           }
@@ -385,9 +390,9 @@ function monsterThree() {
           alert(`You have defeated ${monster3.name}!\n\nYou have found: ${monsterTreasure}`);
           alert(`You put your new item "${monsterTreasure}" into your inventory.`);
           adventurer.prizeCounter++;
-          for (let i = 0; i <= adventurer.prizes.length; i++) {
-            if (adventurer.prizes[i] === undefined) {
-              adventurer.prizes.push(monsterTreasure);
+          for (let i = 0; i <= adventurer.loot.length; i++) {
+            if (adventurer.loot[i] === undefined) {
+              adventurer.loot.push(monsterTreasure);
               break;
             }
           }
@@ -435,7 +440,7 @@ function game() {
   document.getElementById('health').innerHTML = `Your current health: ${adventurer.health}`;
   document.getElementById('prizeCounter').innerHTML = `Your current number of prizes: ${adventurer.prizeCounter}`;
   document.getElementById('inventory').innerHTML = 'Your inventory: <br/>';
-  document.getElementById('prizes').innerHTML = adventurer.prizes.join('<br/>');
+  document.getElementById('prizes').innerHTML = adventurer.loot.join('<br/>');
   document.getElementById('location').innerHTML = `Your current position: ${adventurer.xCoordinate}, ${adventurer.yCoordinate}`;
   while (activeGame === true) {
     move();
@@ -443,7 +448,7 @@ function game() {
     document.getElementById('health').innerHTML = `Your current health: ${adventurer.health}`;
     document.getElementById('prizeCounter').innerHTML = `Your current number of prizes: ${adventurer.prizeCounter}`;
     document.getElementById('inventory').innerHTML = 'Your inventory: <br/>';
-    document.getElementById('prizes').innerHTML = adventurer.prizes.join('<br/>');
+    document.getElementById('prizes').innerHTML = adventurer.loot.join('<br/>');
     document.getElementById('location').innerHTML = `Your current position: ${adventurer.xCoordinate}, ${adventurer.yCoordinate}`;
     if ((monster1.alive === false && monster2.alive === false && monster3.alive === false)
       && adventurer.prizeCounter >= 2) {

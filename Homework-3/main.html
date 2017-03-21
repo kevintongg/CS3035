@@ -5,8 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+" crossorigin="anonymous">
+  <link rel="stylesheet" href="bootstrap.css">
+
+  <script src="jquery-3.2.0.js"></script>
 
   <title>Text Adventure Game</title>
 
@@ -22,24 +23,59 @@
 </head>
 <body>
 <div class="container">
+  <div>
+    <br/>
+    <form>
+      <input id="textbox" type="text" name="name" placeholder="What is your name?">
+      <input id="submit" type="submit" value="Submit">
+    </form>
+    <br/>
+  </div>
+
   <strong id="health"></strong>
+
   <br/>
   <strong id="prizeCounter"></strong>
+
   <br/>
+
   <div class="text-right">
     <strong id="inventory"></strong>
     <strong id="prizes"></strong>
   </div>
+
   <br/>
   <div id="footer">
     <strong id="location"></strong>
   </div>
+
   <br/>
+
   <div class="text-center">
     <strong id="info"></strong>
   </div>
+
   <br/>
-  <script src="main.js"></script>
+
+  <div class="text-center">
+    <strong id="question"></strong>
+  </div>
+
+  <br/>
+
+  <div class="text-center">
+    <div>
+      <button id="north" class="btn btn-primary click">North</button>
+    </div>
+    <br/>
+    <div>
+      <button id="south" class="btn btn-primary click">South</button>
+      <button id="west" class="btn btn-primary click">West</button>
+      <button id="east" class="btn btn-primary click  ">East</button>
+    </div>
+  </div>
+
+  <script src="old/main.js"></script>
 </div>
 </body>
 </html>
