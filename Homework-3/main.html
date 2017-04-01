@@ -23,11 +23,6 @@
       padding-bottom: 50px;
       padding-left: 23px;
     }
-
-    /*#west, #east {*/
-      /*margin-left: 3em;*/
-      /*margin-right: 3em;*/
-    /*}*/
   </style>
 </head>
 <body>
@@ -49,8 +44,9 @@
 
   <br/>
   <div id="footer">
-    <h5 id="location"></h5>
-    <h5 id="event"></h5>
+    <strong id="location"></strong>
+    <br/>
+    <strong id="event"></strong>
   </div>
 
   <br/>
@@ -61,21 +57,19 @@
 
   <br/>
 
-  <div class="text-left">
-    <div id="map" class="table"></div>
-  </div>
 
   <div class="text-center">
     <div>
-      <button id="north" class="btn btn-primary click">North</button>
+      <button id="north" class="btn btn-primary click" style="margin-bottom: 5px; margin-left: 7px">North</button>
+    <br/>
+      <button id="west" class="btn btn-primary click" style="margin-right: 1px">West</button>
+      <button id="south" class="btn btn-primary click">South</button>
+      <button id="east" class="btn btn-primary click" style="margin-left: 1px">East</button>
     </div>
     <br/>
-    <div>
-      <button id="west" class="btn btn-primary click">West</button>
-    <button id="south" class="btn btn-primary click">South</button>
-      <button id="east" class="btn btn-primary click">East</button>
-    </div>
-    <br/>
+  </div>
+  <div class="text-left">
+    <div id="map" class="table"></div>
   </div>
 </div>
 </body>
