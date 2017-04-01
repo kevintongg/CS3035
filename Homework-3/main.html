@@ -1,4 +1,4 @@
-<!--Developed with Firefox-->
+<!--Developed with Google Chrome-->
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
@@ -11,6 +11,7 @@
 
   <script src="jquery-3.2.0.js"></script>
 
+  <script src="main.js"></script>
 
   <title>Text Adventure Game</title>
 
@@ -22,21 +23,20 @@
       padding-bottom: 50px;
       padding-left: 23px;
     }
+
+    /*#west, #east {*/
+      /*margin-left: 3em;*/
+      /*margin-right: 3em;*/
+    /*}*/
   </style>
 </head>
 <body>
 <div class="container">
-  <div>
-    <br/>
-    <form>
-      <input id="nameBox" type="text" name="name" placeholder="What is your name?">
-      <input id="submit" type="submit" value="Submit">
-    </form>
-    <br/>
+  <div class="text-center">
+    <h3 id="name"></h3>
   </div>
 
   <strong id="health"></strong>
-
   <br/>
   <strong id="prizeCounter"></strong>
 
@@ -49,13 +49,8 @@
 
   <br/>
   <div id="footer">
-    <strong id="location"></strong>
-  </div>
-
-  <br/>
-
-  <div class="text-center">
-    <strong id="info"></strong>
+    <h5 id="location"></h5>
+    <h5 id="event"></h5>
   </div>
 
   <br/>
@@ -66,19 +61,22 @@
 
   <br/>
 
+  <div class="text-left">
+    <div id="map" class="table"></div>
+  </div>
+
   <div class="text-center">
     <div>
       <button id="north" class="btn btn-primary click">North</button>
     </div>
     <br/>
     <div>
-      <button id="south" class="btn btn-primary click">South</button>
       <button id="west" class="btn btn-primary click">West</button>
-      <button id="east" class="btn btn-primary click  ">East</button>
+    <button id="south" class="btn btn-primary click">South</button>
+      <button id="east" class="btn btn-primary click">East</button>
     </div>
+    <br/>
   </div>
-  <script src="main.js"></script>
-
 </div>
 </body>
 </html>

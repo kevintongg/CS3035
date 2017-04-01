@@ -92,7 +92,7 @@ $(document).ready(() => {
     'Garrosh Hellscream', // 4
     'Archimonde', // 5
     "Gul'dan"]; // 6
-  const prizes = ['Black Ice [Polearm]', // 0
+  let prizes = ['Black Ice [Polearm]', // 0
     'Excalibur [Sword]', // 1
     'Sword of a Thousand Truths [Sword]', // 2
     'Lambent Light [Rapier]', // 3
@@ -485,11 +485,7 @@ $(document).ready(() => {
       document.getElementById('inventory').innerHTML = 'Your inventory: <br/>';
       document.getElementById('prizes').innerHTML = adventurer.loot.join('<br/>');
       document.getElementById('location').innerHTML = `Your current position: ${adventurer.xCoordinate}, ${adventurer.yCoordinate}`;
-
-
       console.log(monster1.alive && monster2.alive && monster3.alive);
-
-
       if ((!monster1.alive && !monster2.alive && !monster3.alive)
         && adventurer.prizeCounter >= 2) {
         document.getElementById('info').innerHTML = `${adventurer.name} has won the game!`;

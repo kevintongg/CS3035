@@ -20,7 +20,8 @@
     "no-alert": "off",
     "no-unused-vars": "warn",
     "no-undef": "warn",
-    "prefer-template": "off"
+    "prefer-template": "off",
+    "default-case": "off"
   },
   "comma-dangle": 0
 }

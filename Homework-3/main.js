@@ -1,113 +1,53 @@
-import $ from 'jquery';
-
-const map = [
-  // 0,0 0,1 0,2 0,3 0,4 0,5 0,6 0,7
-  ['wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall'],
-  // 1,0 1,1 1,2 1,3 1,4 1,5 1,6 1,7
-  ['wall',
-    'blank',
-    'monster',
-    'potion',
-    'blank',
-    'blank',
-    'prize',
-    'wall'],
-  // 2,0 2,1 2,2 2,3 2,4 2,5 2,6 2,7
-  ['wall',
-    'blank',
-    'blank',
-    'blank',
-    'blank',
-    'blank',
-    'blank',
-    'wall'],
-  // 3,0 3,1 3,2 3,3 3,4 3,5 3,6 3,7
-  ['wall',
-    'blank',
-    'blank',
-    'blank',
-    'blank',
-    'blank',
-    'blank',
-    'wall'],
-  // 4,0 4,1 4,2 4,3 4,4 4,5 4,6 4,7
-  ['wall',
-    'blank',
-    'blank',
-    'potion',
-    'blank',
-    'blank',
-    'monster',
-    'wall'],
-  // 5,0 5,1 5,2 5,3 5,4 5,5 5,6 5,7
-  ['wall',
-    'blank',
-    'blank',
-    'monster',
-    'blank',
-    'blank',
-    'blank',
-    'wall'],
-  // 6,0 6,1 6,2 6,3 6,4 6,5 6,6 6,7
-  ['wall',
-    'prize',
-    'blank',
-    'blank',
-    'start',
-    'blank',
-    'blank',
-    'wall'],
-  // 7,0 7,1 7,2 7,3 7,4 7,5 7,6 7,7
-  ['wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall',
-    'wall'],
+const names = [
+  'Noctis',
+  'Gladiolus',
+  'Ignis',
+  'Prompto',
 ];
-
-const monsterList = ["Kel'thuzad", // 0
+const monsterList = [
+  'Kel\'thuzad', // 0
   "Kael'thas Sunstrider", // 1
   'Arthas Menethil', // 2
   'Deathwing', // 3
   'Garrosh Hellscream', // 4
   'Archimonde', // 5
-  "Gul'dan"]; // 6
-const prizes = ['Black Ice [Polearm]', // 0
+  'Gul\'dan', // 6
+];
+const prizes = [
+  'Black Ice [Polearm]', // 0
   'Excalibur [Sword]', // 1
   'Sword of a Thousand Truths [Sword]', // 2
   'Lambent Light [Rapier]', // 3
   'Elucidator [Sword]', // 4
   'Dark Repulser [Sword]', // 5
   'Titanium Exoskeleton [Armor]', // 6
-  'Purple Floppyslapper [Bludgeon]']; // 7
-const explorationMessages = ['You see something bright. Ooh! Shiny!', // 0
+  'Purple Floppyslapper [Bludgeon]', // 7
+];
+const explorationMessages = [
+  'You see something bright. Ooh! Shiny!', // 0
   'You see a treasure chest. To your surprise, this is the item you have been wanting all your life!', // 1
   'You find an item that could really save your life when you really need it.', // 2
   'You find an interesting item. Hrm. Quite.', // 3
   'You find an item you always wished was real from your video games!', // 4
-  'You find an exotic item. Could be one of a kind.']; // 5
-const encounterMessages = ['You sense a powerful enemy.', // 1
+  'You find an exotic item. Could be one of a kind.', // 5
+];
+const encounterMessages = [
+  'You sense a powerful enemy.', // 1
   'You can feel an extraordinary aura.', // 2
-  'You have a feeling that this will be one of the hardest fights of your life.']; // 3
-const potionMessages = ['You feel reinvigorated.', // 1
+  'You have a feeling that this will be one of the hardest fights of your life.', // 3
+];
+const potionMessages = [
+  'You feel reinvigorated.', // 1
   'You feel refreshed.', // 2
-  'You feel like you could do things you could not do before!']; // 3
+  'You feel like you could do things you could not do before!', // 3
+];
 const playerHealth = 50;
 const x = 6;
 const y = 4;
 let lastX;
 let lastY;
 const activeGame = true;
+
 
 function Adventurer(name, health, prizeCounter, loot, xCoordinate, yCoordinate) {
   this.name = name;
@@ -145,9 +85,25 @@ function potionCalculator() {
   return Math.floor(Math.random() * (15 - 5) + 5);
 }
 
+function makeTableHTML(myArray) {
+  let result = '<table class="table table-bordered text-center" border=1>';
+  for (let i = 0; i < myArray.length; i++) {
+    result += '<tr>';
+    for (let j = 0; j < myArray[i].length; j++) {
+      result += '<td>' + myArray[i][j] + '</td>';
+    }
+    result += '</tr>';
+  }
+  result += '</table>';
+
+  return result;
+}
+
 const playerName = $('#nameBox').val();
 
-const hero = new Adventurer(playerName, playerHealth, 0, [], x, y);
+const hero = new Adventurer(randomElement(names), playerHealth, 0, [], x, y);
+
+console.log(`[${hero.xCoordinate}, ${hero.yCoordinate}]`);
 
 const monsters = [
   new Monster(randomElement(monsterList), randomHealth(10, 15), randomElement(prizes), true),
@@ -155,10 +111,222 @@ const monsters = [
   new Monster(randomElement(monsterList), randomHealth(10, 15), randomElement(prizes), true),
 ];
 
+const map = [
+  // 0,0 0,1 0,2 0,3 0,4 0,5 0,6 0,7
+  ['<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>'],
+  // 1,0 1,1 1,2 1,3 1,4 1,5 1,6 1,7
+  ['<h5>WALL</h5>', '—', 'monster', '—', '—', '—', 'prize', '<h5>WALL</h5>'],
+  // 2,0 2,1 2,2 2,3 2,4 2,5 2,6 2,7
+  ['<h5>WALL</h5>', '—', '—', '—', '—', '—', '—', '<h5>WALL</h5>'],
+  // 3,0 3,1 3,2 3,3 3,4 3,5 3,6 3,7
+  ['<h5>WALL</h5>', '—', '—', '—', '—', 'potion', '—', '<h5>WALL</h5>'],
+  // 4,0 4,1 4,2 4,3 4,4 4,5 4,6 4,7
+  ['<h5>WALL</h5>', '—', '—', 'potion', '—', '—', 'monster', '<h5>WALL</h5>'],
+  // 5,0 5,1 5,2 5,3 5,4 5,5 5,6 5,7
+  ['<h5>WALL</h5>', '—', '—', 'monster', '—', '—', '—', '<h5>WALL</h5>'],
+  // 6,0 6,1 6,2 6,3 6,4 6,5 6,6 6,7
+  ['<h5>WALL</h5>', 'prize', '—', '—', `<strong>${hero.name}</strong>`, '—', '—', '<h5>WALL</h5>'],
+  // 7,0 7,1 7,2 7,3 7,4 7,5 7,6 7,7
+  ['<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>', '<h5>WALL</h5>'],
+];
+
+// 4,6 monster
+// 5,3 monster
+// 1,2 monster
+// 6,1 prize
+// 1,6 prize
+// 4,3 potion
+// 3,5 potion
+
+// Hero starts at 6, 4
+
 $(document).ready(() => {
-  function setName() {
-    $('#info').html(playerName);
-    document.write('hello');
+  $('#name').html(`Adventures of ${hero.name}`);
+
+  function buttonMove() {
+    $('#north').click(() => {
+      lastX = hero.xCoordinate;
+      lastY = hero.yCoordinate;
+      hero.xCoordinate--;
+      console.log(`Previous: ${lastX}. ${lastY}`);
+      if (hero.xCoordinate <= 0) {
+        $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+        hero.xCoordinate++;
+        hero.position = map[hero.xCoordinate][hero.yCoordinate];
+      }
+      map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+      map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+      console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+      $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+      $('#map').html(makeTableHTML(map));
+    });
+    $('#west').click(() => {
+      lastX = hero.xCoordinate;
+      lastY = hero.yCoordinate;
+      hero.yCoordinate--;
+      if (hero.yCoordinate <= 0) {
+        $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+        hero.yCoordinate++;
+        hero.position = map[hero.xCoordinate][hero.yCoordinate];
+      }
+      map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+      map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+      console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+      $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+      $('#map').html(makeTableHTML(map));
+    });
+    $('#east').click(() => {
+      lastX = hero.xCoordinate;
+      lastY = hero.yCoordinate;
+      hero.yCoordinate++;
+      console.log(`Previous: ${hero.xCoordinate}, ${hero.yCoordinate}`);
+      if (hero.yCoordinate >= 7) {
+        $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+        hero.yCoordinate--;
+        hero.position = map[hero.xCoordinate][hero.yCoordinate];
+      }
+      map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+      map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+      console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+      $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+      $('#map').html(makeTableHTML(map));
+    });
+    $('#south').click(() => {
+      lastX = hero.xCoordinate;
+      lastY = hero.yCoordinate;
+      hero.xCoordinate++;
+      map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+      console.log(`Previous: ${hero.xCoordinate}, ${hero.yCoordinate}`);
+      if (hero.xCoordinate >= 7) {
+        $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+        hero.xCoordinate--;
+        hero.position = map[hero.xCoordinate][hero.yCoordinate];
+      }
+      map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+      console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+      $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+      $('#map').html(makeTableHTML(map));
+    });
   }
-  setName();
+
+  function keyMove() {
+    $(document).keydown((e) => {
+      switch (e.which) {
+        case 38: // up
+          lastX = hero.xCoordinate;
+          lastY = hero.yCoordinate;
+          hero.xCoordinate--;
+          console.log(`Previous: ${lastX}. ${lastY}`);
+          if (hero.xCoordinate <= 0) {
+            $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+            hero.xCoordinate++;
+            hero.position = map[hero.xCoordinate][hero.yCoordinate];
+          }
+          map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+          map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+          console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+          $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+          $('#map').html(makeTableHTML(map));
+          break;
+        case 37: // left
+          lastX = hero.xCoordinate;
+          lastY = hero.yCoordinate;
+          hero.yCoordinate++;
+          console.log(`Previous: ${hero.xCoordinate}, ${hero.yCoordinate}`);
+          if (hero.yCoordinate >= 7) {
+            $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+            hero.yCoordinate--;
+            hero.position = map[hero.xCoordinate][hero.yCoordinate];
+          }
+          map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+          map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+          console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+          $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+          $('#map').html(makeTableHTML(map));
+          break;
+        default:
+          break;
+      }
+    });
+    $('#west').click(() => {
+      lastX = hero.xCoordinate;
+      lastY = hero.yCoordinate;
+      hero.yCoordinate--;
+      if (hero.yCoordinate <= 0) {
+        $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+        hero.yCoordinate++;
+        hero.position = map[hero.xCoordinate][hero.yCoordinate];
+      }
+      map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+      map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+      console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+      $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+      $('#map').html(makeTableHTML(map));
+    });
+    $('#east').click(() => {
+      lastX = hero.xCoordinate;
+      lastY = hero.yCoordinate;
+      hero.yCoordinate++;
+      console.log(`Previous: ${hero.xCoordinate}, ${hero.yCoordinate}`);
+      if (hero.yCoordinate >= 7) {
+        $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+        hero.yCoordinate--;
+        hero.position = map[hero.xCoordinate][hero.yCoordinate];
+      }
+      map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+      map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+      console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+      $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+      $('#map').html(makeTableHTML(map));
+    });
+    $('#south').click(() => {
+      lastX = hero.xCoordinate;
+      lastY = hero.yCoordinate;
+      hero.xCoordinate++;
+      map[lastX][lastY] = '<strong><i>Explored</i></strong>';
+      console.log(`Previous: ${hero.xCoordinate}, ${hero.yCoordinate}`);
+      if (hero.xCoordinate >= 7) {
+        $('#event').html(`${hero.name} has hit a wall at (${hero.xCoordinate}, ${hero.yCoordinate}), returning to previous location`);
+        hero.xCoordinate--;
+        hero.position = map[hero.xCoordinate][hero.yCoordinate];
+      }
+      map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+      console.log(`${hero.xCoordinate}, ${hero.yCoordinate}`);
+      $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
+      $('#map').html(makeTableHTML(map));
+    });
+  }
+
+  function exploration() {
+    if (map[hero.xCoordinate][hero.yCoordinate] === map[6][1]) {
+      for (let i = 0; i < map.length; i++) {
+        for (let j = 0; j < map[i].length; j++) {
+          map[hero.xCoordinate][hero.yCoordinate] = `<strong>${hero.name}</strong>`;
+        }
+      }
+    }
+  }
+
+// 4,6 monster
+// 5,3 monster
+// 1,2 monster
+// 6,1 prize
+// 1,6 prize
+// 4,3 potion
+// 3,5 potion
+
+  function game() {
+    $('#map').html(makeTableHTML(map));
+    makeTableHTML(map);
+    buttonMove();
+    exploration();
+    if ((!monsters[0].alive && !monsters[1].alive && !monsters[2].alive)) {
+      document.write('<style>#victory { position:fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); } #refresh { position: absolute; width: 300px; height: 300px; bottom: 0px; right: 25%; left: 50%; margin-left: -150px</style><link rel="stylesheet" href="bootstrap.css"><div class="container"><h2 id="victory" class="text-center">You\'ve won!<br/>Please refresh the page to play again!</h2><div id="refresh" class="text-center"><button id="refreshButton" class="btn btn-primary text-center">Refresh</button></div></div>');
+      $('#refreshButton').click(() => {
+        location.reload();
+      });
+    }
+  }
+
+  game();
 });
