@@ -4,6 +4,7 @@
   "description": "CS3035",
   "main": "index.js",
   "dependencies": {
+    "express": "^4.15.2",
     "jquery": "^3.2.0"
   },
   "devDependencies": {
