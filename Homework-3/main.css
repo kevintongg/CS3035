@@ -48,3 +48,11 @@
 #east {
   margin-left: 1px;
 }
+
+.explored {
+  font-size: 12px;
+}
+
+.monster, .prize, .potion {
+  font-size: 14px;
+}
