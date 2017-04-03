@@ -10,6 +10,10 @@
   margin-left: 10px;
 }
 
+#no {
+  margin-left: 5px;
+}
+
 #prize-container {
   width: 350px;
   height: 100px;
@@ -30,6 +34,15 @@
 #inventory, #log {
   font-size: larger;
   text-decoration: underline;
+}
+
+#name {
+  font-size: 16px;
+  text-align: center;
+}
+
+#fight-intro {
+  font-weight: bold;
 }
 
 #buttons {

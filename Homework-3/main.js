@@ -13,7 +13,7 @@ const monsterList = [
   'Archimonde', // 5
   'Gul\'dan', // 6
 ];
-const prizes = [
+let prizes = [
   'Black Ice [Polearm]', // 0
   'Excalibur [Sword]', // 1
   'Sword of a Thousand Truths [Sword]', // 2
@@ -23,7 +23,7 @@ const prizes = [
   'Titanium Exoskeleton [Armor]', // 6
   'Purple Floppyslapper [Bludgeon]', // 7
 ];
-const explorationMessages = [
+let explorationMessages = [
   'You see something bright. Ooh! Shiny!', // 0
   'You see a treasure chest. To your surprise, this is the item you have been wanting all your life!', // 1
   'You find an item that could really save your life when you really need it.', // 2
@@ -31,16 +31,17 @@ const explorationMessages = [
   'You find an item you always wished was real from your video games!', // 4
   'You find an exotic item. Could be one of a kind.', // 5
 ];
-const encounterMessages = [
+let encounterMessages = [
   'You sense a powerful enemy.', // 1
   'You can feel an extraordinary aura.', // 2
   'You have a feeling that this will be one of the hardest fights of your life.', // 3
 ];
-const potionMessages = [
+let potionMessages = [
   'You feel reinvigorated.', // 1
   'You feel refreshed.', // 2
   'You feel like you could do things you could not do before!', // 3
 ];
+
 const log = [];
 const playerHealth = 50;
 const x = 6;
@@ -94,8 +95,12 @@ function remove(array, element) {
   return array.filter(e => e !== element);
 }
 
+function disable() {
+  $('*').off('keyup keydown keypress click');
+}
+
 function makeTableHTML(myArray) {
-  let result = '<table class="table table-bordered text-center" border=1 style="margin-top: 10px;">';
+  let result = '<table class="table table-bordered text-center map" border=1 style="margin-top: 10px;">';
   for (let i = 0; i < myArray.length; i++) {
     result += '<tr>';
     for (let j = 0; j < myArray[i].length; j++) {
@@ -143,7 +148,73 @@ const map = [
   ['—', '—', '—', '—', '—', '—', '—', '—'],
 ];
 
+function monsterYes() {
+  $('#yes').click(() => {
+    const playerDamage = playerDamageCalculator();
+    const monsterDamage = monsterDamageCalculator();
+    $('#yes').hide();
+    $('#no').hide();
+    $('#next3').hide();
+    $('#next1').show();
+    $('#fight-info').html('');
+    $('#monster-info').html(`${monsters[0].name} has ${monsters[0].health} health`);
+    $('#next1').click(() => {
+      $('#player-damage').html(`You dealt ${playerDamage} damage!`);
+      $('#monster-damage').html(`${monsters[0].name} dealt ${playerDamage} damage!`);
+      hero.health -= monsterDamage;
+      monsters[0].health -= playerDamage;
+      $('#next1').hide();
+      $('#next2').show();
+      $('#next2').click(() => {
+        $('#player-damage').html('');
+        $('#monster-damage').html('');
+        $('#health').html(`Your current health: ${hero.health}`);
+        $('#monster-info').html(`${monsters[0].name} has ${monsters[0].health} health`);
+        $('#next2').hide();
+        $('#next3').show();
+        $('#next3').click(() => {
+          $('#next3').hide();
+          $('#monster-info').html('');
+          if (monsters[0].health > 0) {
+            $('#fight-info').html('Continue?');
+            $('#yes').show();
+            $('#no').show();
+            if ($('#yes').click()) {
+              monsterYes();
+            }
+          }
+        })
+      });
+    });
+  })
+}
+
 function events() {
+  if ((hero.xCoordinate === 4 && hero.yCoordinate === 6) && monsters[0].alive === true) {
+    disable();
+    const message = randomElement(encounterMessages);
+    encounterMessages = remove(encounterMessages, message);
+    $('#fight-info').html(message);
+    $('#ok1').show();
+    $('#ok1').click(() => {
+      $('#fight-info').html(`${monsters[0].name} has appeared!`);
+      $('#ok1').hide();
+      $('#ok2').show();
+      $('#ok2').click(() => {
+        $('#fight-info').html('Would you like to fight?');
+        $('#ok2').hide();
+        $('#yes').show();
+        $('#no').show();
+        monsterYes();
+      });
+    });
+    // $('#ok').click(() => {
+    //   $('#ok').hide();
+    //   $('#fight-info').html('Would you like to fight?');
+    //   $('#yes').show();
+    //   $('#no').show();
+    // });
+  }
   if ((hero.xCoordinate === 6 && hero.yCoordinate === 1) && prize1 === false) {
     const treasure = randomElement(prizes);
     const message = randomElement(explorationMessages);
@@ -154,11 +225,11 @@ function events() {
       if (hero.loot[i] === undefined) {
         hero.loot.push(treasure);
         hero.prizeCounter++;
+        prizes = remove(prizes, treasure);
         prize1 = true;
         break;
       }
-      remove(prizes, treasure);
-      remove(explorationMessages, message);
+      explorationMessages = remove(explorationMessages, message);
       $('#prizes').html(hero.loot.join('<br/>'));
       if ($('#yes').is(':visible')) {
         $('#yes').show();
@@ -176,11 +247,11 @@ function events() {
       if (hero.loot[i] === undefined) {
         hero.loot.push(treasure);
         hero.prizeCounter++;
+        prizes = remove(prizes, treasure);
         prize2 = true;
         break;
       }
-      remove(prizes, treasure);
-      remove(explorationMessages, message);
+      explorationMessages = remove(explorationMessages, message);
       $('#prizes').html(hero.loot.join('<br/>'));
       if ($('#yes').is(':visible')) {
         $('#yes').show();
@@ -191,21 +262,19 @@ function events() {
   if ((hero.xCoordinate === 4 && hero.yCoordinate === 3) && potion1 === false) {
     const message = randomElement(potionMessages);
     const event = `Obtained a potion at [${hero.xCoordinate}, ${hero.yCoordinate}]`;
-    const regen = potionCalculator();
-    hero.health += regen;
+    hero.health += potionCalculator();
     log.push(`${message}<br/>${event}`);
     $('#log-info').html(log.join('<br/>'));
-    remove(potionMessages, message);
-
+    potionMessages = remove(potionMessages, message);
+    potion1 = true;
   }
   if ((hero.xCoordinate === 3 && hero.yCoordinate === 5) && potion2 === false) {
     const message = randomElement(potionMessages);
     const event = `Obtained a potion at [${hero.xCoordinate}, ${hero.yCoordinate}]`;
-    const regen = potionCalculator();
-    hero.health += regen;
+    hero.health += potionCalculator();
     log.push(`${message}<br/>${event}`);
     $('#log-info').html(log.join('<br/>'));
-    remove(potionMessages, message);
+    potionMessages = remove(potionMessages, message);
     potion2 = true;
   }
 }
@@ -238,37 +307,18 @@ function mapInfo() {
     !(lastX === 3 && lastY === 5)) {
     map[lastX][lastY] = '<i class="explored">Explored</i>';
   }
-
-  // for (let i = 0; i < map.length; i++) {
-  //   for (let j = 0; j < map[i].length; j++) {
-  //     if (map[i][j] === '<i>Explored</i>') {
-  //       map[i][j] = '<i style="font-size: 12px;">Explored</i>';
-  //     }
-  //   }
-  // }
 }
 
-// 4,6 monster
-// 5,3 monster
-// 1,2 monster
-// 6,1 prize
-// 1,6 prize
-// 4,3 potion
-// 3,5 potion
-
-// Hero starts at 6, 4
-
 $(document).ready(() => {
+  $('#ok1').hide();
+  $('#ok2').hide();
   $('#yes').hide();
   $('#no').hide();
-  $('#name').html(`Adventures of ${hero.name}`);
-
-  function scroll() {
-    for (let i = 0; i < log.length; i++) {
-      document.getElementById('#prizes').scrollTop = log[i].offsetHeight + log[i].offsetTop;
-      break;
-    }
-  }
+  $('#next1').hide();
+  $('#next2').hide();
+  $('#next3').hide();
+  $('#title').html(`The Adventures of ${hero.name}`);
+  $('#name').html(`The Adventures of ${hero.name}`);
 
   function move() {
     $('#north').click(() => {
@@ -279,7 +329,8 @@ $(document).ready(() => {
       lastY = hero.yCoordinate;
       hero.xCoordinate--;
       if (hero.xCoordinate === 0) {
-        $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.xCoordinate++;
         hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -301,7 +352,8 @@ $(document).ready(() => {
       hero.yCoordinate--;
       mapInfo();
       if (hero.yCoordinate === 0) {
-        $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.yCoordinate++;
         hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -326,7 +378,8 @@ $(document).ready(() => {
       hero.yCoordinate++;
       mapInfo();
       if (hero.yCoordinate === 7) {
-        $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.yCoordinate--;
         hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -350,7 +403,8 @@ $(document).ready(() => {
       lastY = hero.yCoordinate;
       hero.xCoordinate++;
       if (hero.xCoordinate === 7) {
-        $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+        $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.xCoordinate--;
         hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -372,7 +426,8 @@ $(document).ready(() => {
           lastY = hero.yCoordinate;
           hero.xCoordinate--;
           if (hero.xCoordinate === 0) {
-            $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.xCoordinate++;
             hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -393,7 +448,8 @@ $(document).ready(() => {
           hero.yCoordinate++;
           mapInfo();
           if (hero.yCoordinate === 7) {
-            $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.yCoordinate--;
             hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -417,7 +473,8 @@ $(document).ready(() => {
           lastY = hero.yCoordinate;
           hero.yCoordinate--;
           if (hero.yCoordinate === 0) {
-            $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.yCoordinate++;
             hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -441,7 +498,8 @@ $(document).ready(() => {
           lastY = hero.yCoordinate;
           hero.xCoordinate++;
           if (hero.xCoordinate === 7) {
-            $('#event').html(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            log.push(`${hero.name} has hit a wall at [${hero.xCoordinate}, ${hero.yCoordinate}], returning to previous location`);
+            $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.xCoordinate--;
             hero.position = map[hero.xCoordinate][hero.yCoordinate];
@@ -481,7 +539,7 @@ $(document).ready(() => {
           hero.loot.push(treasure);
           break;
         }
-        remove(prizes, treasure);
+        prizes = remove(prizes, treasure);
         hero.prizeCounter++;
       }
     }
@@ -507,6 +565,5 @@ $(document).ready(() => {
     }
   }
 
-  scroll();
   game();
 });

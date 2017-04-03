@@ -14,15 +14,16 @@
 
   <script src="main.js"></script>
 
-  <title>Text Adventure Game</title>
+  <title id="title"></title>
 
 </head>
 <body>
 <div class="container">
   <div class="text-center">
-    <h3 id="name"></h3>
+    <strong id="name"></strong>
   </div>
 
+  <br/>
   <strong id="health"></strong>
   <br/>
   <strong id="prizeCounter"></strong>
@@ -59,6 +60,7 @@
     </div>
     <br/>
   </div>
+
   <div id="map-container">
     <div id="map" class="table"></div>
   </div>
@@ -70,8 +72,13 @@
 
   <br/>
 
-  <span id="fight">
-    <strong id="fight-info">Hello</strong>
+  <span>
+    <strong id="fight-info"></strong>
+    <strong id="monster-info"></strong>
+    <br/>
+    <strong id="player-damage"></strong>
+    <br/>
+    <strong id="monster-damage"></strong>
   </span>
 
   <br/>
@@ -85,8 +92,13 @@
   </div>
 
   <div>
+    <button id="ok1" class="btn btn-primary btn-sm">Ok</button>
+    <button id="ok2" class="btn btn-primary btn-sm">Ok</button>
     <button id="yes" class="btn btn-primary btn-sm">Yes</button>
     <button id="no" class="btn btn-primary btn-sm">No</button>
+    <button id="next1" class="btn btn-primary btn-sm">Next</button>
+    <button id="next2" class="btn btn-primary btn-sm">Next</button>
+    <button id="next3" class="btn btn-primary btn-sm">Next</button>
   </div>
 </div>
 </div>
