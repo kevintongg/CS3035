@@ -1,0 +1,50 @@
+#footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding-bottom: 50px;
+  padding-left: 23px;
+}
+
+#ok {
+  margin-left: 10px;
+}
+
+#prize-container {
+  width: 350px;
+  height: 100px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  float: right;
+}
+
+#log-info {
+  width: 375px;
+  height: 100px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  float: right;
+  margin: 10px 0 0 10px;
+}
+
+#inventory, #log {
+  font-size: larger;
+  text-decoration: underline;
+}
+
+#buttons {
+  margin-left: 350px;
+}
+
+#north {
+  margin-bottom: 5px;
+  margin-left: 7px;
+}
+
+#west {
+  margin-right: 1px;
+}
+
+#east {
+  margin-left: 1px;
+}

@@ -200,7 +200,7 @@ $(document).ready(() => {
         adventurer.yCoordinate--;
         if (adventurer.yCoordinate === 0) {
           alert("You've hit a wall! Returning to previous location.");
-          document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
           adventurer.yCoordinate++;
           adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
         }
@@ -211,7 +211,7 @@ $(document).ready(() => {
         adventurer.xCoordinate++;
         if (adventurer.xCoordinate >= 7) {
           alert("You've hit a wall! Returning to previous location.");
-          document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
           adventurer.xCoordinate--;
           adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
         }
@@ -222,7 +222,7 @@ $(document).ready(() => {
         adventurer.yCoordinate++;
         if (adventurer.yCoordinate >= 7) {
           alert("You've hit a wall! Returning to previous location.");
-          document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
           adventurer.yCoordinate--;
           adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
         }
@@ -233,7 +233,7 @@ $(document).ready(() => {
         adventurer.xCoordinate--;
         if (adventurer.xCoordinate === 0) {
           alert("You've hit a wall! Returning to previous location.");
-          document.getElementById('info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} has hit a wall at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
           adventurer.xCoordinate++;
           adventurer.position = map[adventurer.xCoordinate][adventurer.yCoordinate];
         }
@@ -284,13 +284,13 @@ $(document).ready(() => {
           }
         }
         if (monster1.health <= 0) {
-          document.getElementById('info').innerHTML = `${adventurer.name} has defeated ${monster1.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} has defeated ${monster1.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         } else {
-          document.getElementById('info').innerHTML = `${adventurer.name} encountered ${monster1.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} encountered ${monster1.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         }
         break;
       case 'n':
-        document.getElementById('info').innerHTML = `${adventurer.name} has escaped from ${monster1.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+        document.getElementById('log-info').innerHTML = `${adventurer.name} has escaped from ${monster1.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         alert('You have escaped to the room you were previously in.');
         adventurer.xCoordinate = lastX;
         adventurer.yCoordinate = lastY;
@@ -341,13 +341,13 @@ $(document).ready(() => {
           }
         }
         if (monster2.health <= 0) {
-          document.getElementById('info').innerHTML = `${adventurer.name} has defeated ${monster2.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} has defeated ${monster2.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         } else {
-          document.getElementById('info').innerHTML = `${adventurer.name} encountered ${monster2.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} encountered ${monster2.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         }
         break;
       case 'n':
-        document.getElementById('info').innerHTML = `${adventurer.name} has escaped from ${monster2.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+        document.getElementById('log-info').innerHTML = `${adventurer.name} has escaped from ${monster2.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         alert('You have escaped to the room you were previously in.');
         adventurer.xCoordinate = lastX;
         adventurer.yCoordinate = lastY;
@@ -398,13 +398,13 @@ $(document).ready(() => {
           }
         }
         if (monster3.health <= 0) {
-          document.getElementById('info').innerHTML = `${adventurer.name} has defeated ${monster3.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} has defeated ${monster3.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         } else {
-          document.getElementById('info').innerHTML = `${adventurer.name} encountered ${monster3.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+          document.getElementById('log-info').innerHTML = `${adventurer.name} encountered ${monster3.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         }
         break;
       case 'n':
-        document.getElementById('info').innerHTML = `${adventurer.name} has escaped from ${monster3.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
+        document.getElementById('log-info').innerHTML = `${adventurer.name} has escaped from ${monster3.name} at (${adventurer.xCoordinate}, ${adventurer.yCoordinate})`;
         alert('You have escaped to the room you were previously in.');
         adventurer.xCoordinate = lastX;
         adventurer.yCoordinate = lastY;
@@ -422,7 +422,7 @@ $(document).ready(() => {
     const message = randomElement(potionMessages);
     potionMessages.filter(item => item !== message);
     alert(`${adventurer.name} now has ${adventurer.health} health!`);
-    document.getElementById('info').innerHTML = `${adventurer.name} drank a potion at (${adventurer.xCoordinate}, ${adventurer.yCoordinate}) and gained ${regen} health`;
+    document.getElementById('log-info').innerHTML = `${adventurer.name} drank a potion at (${adventurer.xCoordinate}, ${adventurer.yCoordinate}) and gained ${regen} health`;
   }
 
   function exploration() {
@@ -440,7 +440,7 @@ $(document).ready(() => {
       prizes = prizes.filter(item => item !== treasure);
       adventurer.prizeCounter++;
       map[adventurer.xCoordinate][adventurer.yCoordinate] = 'blank';
-      document.getElementById('info').innerHTML = `${adventurer.name} found: ${treasure} at (6, 1)`;
+      document.getElementById('log-info').innerHTML = `${adventurer.name} found: ${treasure} at (6, 1)`;
     } else if ((adventurer.xCoordinate === 4 && adventurer.yCoordinate === 6) && monster1.alive === true && map[adventurer.xCoordinate][adventurer.yCoordinate] === 'monster') {
       monsterOne();
     } else if ((adventurer.xCoordinate === 5 && adventurer.yCoordinate === 3) && monster2.alive === true && map[adventurer.xCoordinate][adventurer.yCoordinate] === 'monster') {
@@ -451,7 +451,7 @@ $(document).ready(() => {
       potion();
       map[adventurer.xCoordinate][adventurer.yCoordinate] = 'blank';
     } else if (map[adventurer.xCoordinate][adventurer.yCoordinate] === 'blank' || map[adventurer.xCoordinate][adventurer.yCoordinate] === 'start') {
-      document.getElementById('info').innerHTML = `${adventurer.name} has entered an empty room`;
+      document.getElementById('log-info').innerHTML = `${adventurer.name} has entered an empty room`;
     }
   }
 
@@ -475,7 +475,7 @@ $(document).ready(() => {
       document.getElementById('map').innerHTML = makeHTMLTable(map);
       if ((monster1.alive === false && monster2.alive === false && monster3.alive === false)
         && adventurer.prizeCounter >= 2) {
-        document.getElementById('info').innerHTML = `${adventurer.name} has won the game!`;
+        document.getElementById('log-info').innerHTML = `${adventurer.name} has won the game!`;
         alert('You have won!');
         break;
       }
