@@ -78,14 +78,6 @@ function randomElement(array) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
-function playerDamageCalculator() {
-  return Math.floor(Math.random() * 5) + 1;
-}
-
-function monsterDamageCalculator() {
-  return Math.floor(Math.random() * 4) + 1;
-}
-
 function potionCalculator() {
   return Math.floor(Math.random() * (15 - 5) + 5);
 }
@@ -188,7 +180,7 @@ function events() {
         $('#no').click(() => {
           log.push('Returning to the previous spot');
           $('#log-info').html(log.join('<br/>'));
-          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>'
+          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>';
           hero.xCoordinate = lastX;
           hero.yCoordinate = lastY;
           map[hero.xCoordinate][hero.yCoordinate] = `<strong style='font-size: 12pt;'>${hero.name}</strong>`;
@@ -237,7 +229,7 @@ function events() {
         $('#no').click(() => {
           log.push('Returning to the previous spot');
           $('#log-info').html(log.join('<br/>'));
-          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>'
+          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>';
           hero.xCoordinate = lastX;
           hero.yCoordinate = lastY;
           map[hero.xCoordinate][hero.yCoordinate] = `<strong style='font-size: 12pt;'>${hero.name}</strong>`;
@@ -286,7 +278,7 @@ function events() {
         $('#no').click(() => {
           log.push('Returning to the previous spot');
           $('#log-info').html(log.join('<br/>'));
-          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>'
+          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>';
           hero.xCoordinate = lastX;
           hero.yCoordinate = lastY;
           map[hero.xCoordinate][hero.yCoordinate] = `<strong style='font-size: 12pt;'>${hero.name}</strong>`;
@@ -457,9 +449,6 @@ $(document).ready(() => {
       $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
       $('#prizeCounter').html(`Your current number of prizes: ${hero.prizeCounter}`);
       $('#map').html(makeTableHTML(map));
-      for (let i = 0; i <= hero.loot.length; i++) {
-        console.log(`${i + 1}: ${hero.loot[i]}`);
-      }
     });
     $('#east').click(() => {
       $('#health').html(`Your current health: ${hero.health}`);
@@ -482,10 +471,7 @@ $(document).ready(() => {
       $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
       $('#prizeCounter').html(`Your current number of prizes: ${hero.prizeCounter}`);
       $('#map').html(makeTableHTML(map));
-      for (let i = 0; i <= hero.loot.length; i++) {
-        console.log(`${i + 1}: ${hero.loot[i]}`);
-      }
-    });
+          });
     $('#south').click(() => {
       $('#health').html(`Your current health: ${hero.health}`);
       $('#prizeCounter').html(`Your current number of prizes: ${hero.prizeCounter}`);
@@ -549,9 +535,6 @@ $(document).ready(() => {
           $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
           $('#prizeCounter').html(`Your current number of prizes: ${hero.prizeCounter}`);
           $('#map').html(makeTableHTML(map));
-          for (let i = 0; i <= hero.loot.length; i++) {
-            console.log(`${i + 1}: ${hero.loot[i]}`);
-          }
           break;
         case 37: // left
           $('#health').html(`Your current health: ${hero.health}`);
@@ -573,12 +556,6 @@ $(document).ready(() => {
           $('#location').html(`Your current position: [${hero.xCoordinate}, ${hero.yCoordinate}]`);
           $('#prizeCounter').html(`Your current number of prizes: ${hero.prizeCounter}`);
           $('#map').html(makeTableHTML(map));
-          for (let i = 0; i <= hero.loot.length; i++) {
-            console.log(`${i + 1}: ${hero.loot[i]}`);
-          }
-          for (let i = 0; i < monsters.length; i++) {
-            console.log(`${i + 1} status: ${monsters[i].alive}`);
-          }
           break;
         case 40: // down
           $('#health').html(`Your current health: ${hero.health}`);
