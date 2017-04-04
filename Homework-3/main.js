@@ -48,7 +48,6 @@ const x = 6;
 const y = 4;
 let lastX;
 let lastY;
-const activeGame = true;
 let prize1 = false;
 let prize2 = false;
 let potion1 = false;
@@ -93,10 +92,6 @@ function potionCalculator() {
 
 function remove(array, element) {
   return array.filter(e => e !== element);
-}
-
-function disable() {
-  $('*').off('keyup keydown keypress click');
 }
 
 function makeTableHTML(myArray) {
@@ -148,55 +143,22 @@ const map = [
   ['—', '—', '—', '—', '—', '—', '—', '—'],
 ];
 
-function monsterYes() {
-  $('#yes').click(() => {
-    const playerDamage = playerDamageCalculator();
-    const monsterDamage = monsterDamageCalculator();
-    $('#yes').hide();
-    $('#no').hide();
-    $('#next3').hide();
-    $('#next1').show();
-    $('#fight-info').html('');
-    $('#monster-info').html(`${monsters[0].name} has ${monsters[0].health} health`);
-    $('#next1').click(() => {
-      $('#player-damage').html(`You dealt ${playerDamage} damage!`);
-      $('#monster-damage').html(`${monsters[0].name} dealt ${playerDamage} damage!`);
-      hero.health -= monsterDamage;
-      monsters[0].health -= playerDamage;
-      $('#next1').hide();
-      $('#next2').show();
-      $('#next2').click(() => {
-        $('#player-damage').html('');
-        $('#monster-damage').html('');
-        $('#health').html(`Your current health: ${hero.health}`);
-        $('#monster-info').html(`${monsters[0].name} has ${monsters[0].health} health`);
-        $('#next2').hide();
-        $('#next3').show();
-        $('#next3').click(() => {
-          $('#next3').hide();
-          $('#monster-info').html('');
-          if (monsters[0].health > 0) {
-            $('#fight-info').html('Continue?');
-            $('#yes').show();
-            $('#no').show();
-            if ($('#yes').click()) {
-              monsterYes();
-            }
-          }
-        })
-      });
+function checkWin() {
+  if (!monsters[0].alive && !monsters[1].alive && !monsters[2].alive) {
+    document.write('<style>#victory { position:fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); } #refresh { position: absolute; width: 300px; height: 300px; bottom: 0; right: 25%; left: 50%; margin-left: -150px</style><link rel="stylesheet" href="bootstrap.css"><div class="container"><h2 id="victory" class="text-center">You\'ve won!<br/>Please refresh the page to play again!</h2><div id="refresh" class="text-center"><button id="refreshButton" class="btn btn-primary text-center">Refresh</button></div></div>');
+    $('#refreshButton').click(() => {
+      location.reload();
     });
-  })
+  }
 }
 
 function events() {
   if ((hero.xCoordinate === 4 && hero.yCoordinate === 6) && monsters[0].alive === true) {
-    disable();
     const message = randomElement(encounterMessages);
-    encounterMessages = remove(encounterMessages, message);
     $('#fight-info').html(message);
     $('#ok1').show();
     $('#ok1').click(() => {
+      encounterMessages = remove(encounterMessages, message);
       $('#fight-info').html(`${monsters[0].name} has appeared!`);
       $('#ok1').hide();
       $('#ok2').show();
@@ -205,15 +167,138 @@ function events() {
         $('#ok2').hide();
         $('#yes').show();
         $('#no').show();
-        monsterYes();
+        $('#yes').click(() => {
+          const treasure = randomElement(prizes);
+          monsters[0].alive = false;
+          log.push(`You have defeated ${monsters[0].name} and have received ${treasure}!`);
+          $('#log-info').html(log.join('<br/>'));
+          for (let i = 0; i <= hero.loot.length; i++) {
+            if (hero.loot[i] === undefined) {
+              hero.loot.push(treasure);
+              hero.prizeCounter++;
+              prizes = remove(prizes, treasure);
+              break;
+            }
+          }
+          $('#ok1').hide();
+          $('#ok2').hide();
+          $('#yes').hide();
+          $('#no').hide();
+        });
+        $('#no').click(() => {
+          log.push('Returning to the previous spot');
+          $('#log-info').html(log.join('<br/>'));
+          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>'
+          hero.xCoordinate = lastX;
+          hero.yCoordinate = lastY;
+          map[hero.xCoordinate][hero.yCoordinate] = `<strong style='font-size: 12pt;'>${hero.name}</strong>`;
+          $('#map').html(makeTableHTML(map));
+          $('#ok1').hide();
+          $('#ok2').hide();
+          $('#yes').hide();
+          $('#no').hide();
+        });
       });
     });
-    // $('#ok').click(() => {
-    //   $('#ok').hide();
-    //   $('#fight-info').html('Would you like to fight?');
-    //   $('#yes').show();
-    //   $('#no').show();
-    // });
+    checkWin();
+  }
+  if ((hero.xCoordinate === 5 && hero.yCoordinate === 3) && monsters[1].alive === true) {
+    const message = randomElement(encounterMessages);
+    $('#fight-info').html(message);
+    $('#ok1').show();
+    $('#ok1').click(() => {
+      encounterMessages = remove(encounterMessages, message);
+      $('#fight-info').html(`${monsters[1].name} has appeared!`);
+      $('#ok1').hide();
+      $('#ok2').show();
+      $('#ok2').click(() => {
+        $('#fight-info').html('Would you like to fight?');
+        $('#ok2').hide();
+        $('#yes').show();
+        $('#no').show();
+        $('#yes').click(() => {
+          const treasure = randomElement(prizes);
+          monsters[1].alive = false;
+          log.push(`You have defeated ${monsters[1].name} and have received ${treasure}!`);
+          $('#log-info').html(log.join('<br/>'));
+          for (let i = 0; i <= hero.loot.length; i++) {
+            if (hero.loot[i] === undefined) {
+              hero.loot.push(treasure);
+              hero.prizeCounter++;
+              prizes = remove(prizes, treasure);
+              break;
+            }
+          }
+          $('#ok1').hide();
+          $('#ok2').hide();
+          $('#yes').hide();
+          $('#no').hide();
+        });
+        $('#no').click(() => {
+          log.push('Returning to the previous spot');
+          $('#log-info').html(log.join('<br/>'));
+          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>'
+          hero.xCoordinate = lastX;
+          hero.yCoordinate = lastY;
+          map[hero.xCoordinate][hero.yCoordinate] = `<strong style='font-size: 12pt;'>${hero.name}</strong>`;
+          $('#map').html(makeTableHTML(map));
+          $('#ok1').hide();
+          $('#ok2').hide();
+          $('#yes').hide();
+          $('#no').hide();
+        });
+      });
+    });
+    checkWin();
+  }
+  if ((hero.xCoordinate === 1 && hero.yCoordinate === 2) && monsters[2].alive === true) {
+    const message = randomElement(encounterMessages);
+    $('#fight-info').html(message);
+    $('#ok1').show();
+    $('#ok1').click(() => {
+      encounterMessages = remove(encounterMessages, message);
+      $('#fight-info').html(`${monsters[2].name} has appeared!`);
+      $('#ok1').hide();
+      $('#ok2').show();
+      $('#ok2').click(() => {
+        $('#fight-info').html('Would you like to fight?');
+        $('#ok2').hide();
+        $('#yes').show();
+        $('#no').show();
+        $('#yes').click(() => {
+          const treasure = randomElement(prizes);
+          monsters[2].alive = false;
+          log.push(`You have defeated ${monsters[2].name} and have received ${treasure}!`);
+          $('#log-info').html(log.join('<br/>'));
+          for (let i = 0; i <= hero.loot.length; i++) {
+            if (hero.loot[i] === undefined) {
+              hero.loot.push(treasure);
+              hero.prizeCounter++;
+              prizes = remove(prizes, treasure);
+              break;
+            }
+          }
+          $('#ok1').hide();
+          $('#ok2').hide();
+          $('#yes').hide();
+          $('#no').hide();
+        });
+        $('#no').click(() => {
+          log.push('Returning to the previous spot');
+          $('#log-info').html(log.join('<br/>'));
+          map[hero.xCoordinate][hero.yCoordinate] = '<i class="monster">Monster</i>'
+          hero.xCoordinate = lastX;
+          hero.yCoordinate = lastY;
+          map[hero.xCoordinate][hero.yCoordinate] = `<strong style='font-size: 12pt;'>${hero.name}</strong>`;
+          $('#map').html(makeTableHTML(map));
+          $('#ok1').hide();
+          $('#ok2').hide();
+          $('#yes').hide();
+          $('#no').hide();
+        });
+      });
+    });
+    checkWin();
   }
   if ((hero.xCoordinate === 6 && hero.yCoordinate === 1) && prize1 === false) {
     const treasure = randomElement(prizes);
@@ -277,6 +362,12 @@ function events() {
     potionMessages = remove(potionMessages, message);
     potion2 = true;
   }
+  if (!monsters[0].alive && !monsters[1].alive && !monsters[2].alive) {
+    document.write('<style>#victory { position:fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); } #refresh { position: absolute; width: 300px; height: 300px; bottom: 0; right: 25%; left: 50%; margin-left: -150px</style><link rel="stylesheet" href="bootstrap.css"><div class="container"><h2 id="victory" class="text-center">You\'ve won!<br/>Please refresh the page to play again!</h2><div id="refresh" class="text-center"><button id="refreshButton" class="btn btn-primary text-center">Refresh</button></div></div>');
+    $('#refreshButton').click(() => {
+      location.reload();
+    });
+  }
 }
 
 function mapInfo() {
@@ -320,6 +411,9 @@ $(document).ready(() => {
   $('#title').html(`The Adventures of ${hero.name}`);
   $('#name').html(`The Adventures of ${hero.name}`);
 
+  log.push('You are an adventurer who before entering this dungeon, was given an invincibility potion by a local resident before entering to tackle this dungeon.');
+  $('#log-info').html(log.join('<br/>'));
+
   function move() {
     $('#north').click(() => {
       $('#health').html(`Your current health: ${hero.health}`);
@@ -333,7 +427,6 @@ $(document).ready(() => {
         $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.xCoordinate++;
-        hero.position = map[hero.xCoordinate][hero.yCoordinate];
       }
       events();
       mapInfo();
@@ -356,7 +449,6 @@ $(document).ready(() => {
         $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.yCoordinate++;
-        hero.position = map[hero.xCoordinate][hero.yCoordinate];
       }
       mapInfo();
       events();
@@ -382,7 +474,6 @@ $(document).ready(() => {
         $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.yCoordinate--;
-        hero.position = map[hero.xCoordinate][hero.yCoordinate];
       }
       events();
       mapInfo();
@@ -407,7 +498,6 @@ $(document).ready(() => {
         $('#log-info').html(log.join('<br/>'));
         map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
         hero.xCoordinate--;
-        hero.position = map[hero.xCoordinate][hero.yCoordinate];
       }
       events();
       mapInfo();
@@ -430,7 +520,6 @@ $(document).ready(() => {
             $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.xCoordinate++;
-            hero.position = map[hero.xCoordinate][hero.yCoordinate];
           }
           events();
           mapInfo();
@@ -452,7 +541,6 @@ $(document).ready(() => {
             $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.yCoordinate--;
-            hero.position = map[hero.xCoordinate][hero.yCoordinate];
           }
           events();
           mapInfo();
@@ -477,7 +565,6 @@ $(document).ready(() => {
             $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.yCoordinate++;
-            hero.position = map[hero.xCoordinate][hero.yCoordinate];
           }
           mapInfo();
           events();
@@ -488,6 +575,9 @@ $(document).ready(() => {
           $('#map').html(makeTableHTML(map));
           for (let i = 0; i <= hero.loot.length; i++) {
             console.log(`${i + 1}: ${hero.loot[i]}`);
+          }
+          for (let i = 0; i < monsters.length; i++) {
+            console.log(`${i + 1} status: ${monsters[i].alive}`);
           }
           break;
         case 40: // down
@@ -502,7 +592,6 @@ $(document).ready(() => {
             $('#log-info').html(log.join('<br/>'));
             map[hero.xCoordinate][hero.yCoordinate] = '<strong>WALL</strong>';
             hero.xCoordinate--;
-            hero.position = map[hero.xCoordinate][hero.yCoordinate];
           }
           events();
           mapInfo();
@@ -513,36 +602,6 @@ $(document).ready(() => {
           break;
       }
     });
-  }
-
-
-  function exploration() {
-    // if ($('#ok').click()) {
-    //   $('#ok').click(() => {
-    //     $('#ok').hide();
-    //   });
-    // }
-    // if ($('#ok').is(':visible')) {
-    //   $('#xd').click(() => {
-    //     $('#ok').show();
-    //   });
-    // }
-    if (hero.xCoordinate === 6 && hero.yCoordinate === 1) {
-      console.log('HELLO');
-      const treasure = randomElement(prizes);
-      const message = randomElement(explorationMessages);
-      const event = `Obtained: ${treasure}`;
-      $('#misc').html(message);
-      $('#log-info').html(event);
-      for (let i = 0; i <= hero.loot.length; i++) {
-        if (hero.loot[i] === undefined) {
-          hero.loot.push(treasure);
-          break;
-        }
-        prizes = remove(prizes, treasure);
-        hero.prizeCounter++;
-      }
-    }
   }
 
   function info() {
@@ -556,13 +615,6 @@ $(document).ready(() => {
     $('#map').html(makeTableHTML(map));
     info();
     move();
-    exploration();
-    if (!monsters[0].alive && !monsters[1].alive && !monsters[2].alive) {
-      document.write('<style>#victory { position:fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); } #refresh { position: absolute; width: 300px; height: 300px; bottom: 0; right: 25%; left: 50%; margin-left: -150px</style><link rel="stylesheet" href="bootstrap.css"><div class="container"><h2 id="victory" class="text-center">You\'ve won!<br/>Please refresh the page to play again!</h2><div id="refresh" class="text-center"><button id="refreshButton" class="btn btn-primary text-center">Refresh</button></div></div>');
-      $('#refreshButton').click(() => {
-        location.reload();
-      });
-    }
   }
 
   game();
