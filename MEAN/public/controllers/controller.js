@@ -1,8 +1,45 @@
-function AppCtrl($scope, $http) {
-  console.log('Hello from controller');
+const myApp = angular.module('myApp', []);
 
-  $http.get('/contactlist').success((response) => {
-    console.log('I got the data I requested');
-    $scope.contactList = response;
-  });
-}
+myApp.controller('AppCtrl', [
+  '$scope',
+  '$http',
+  function ($scope, $http) {
+    $http.get('/contactlist').then((response) => {
+      $scope.contactlist = response.data;
+    });
+
+    function refresh() {
+      console.log('Message from controller');
+      $http.get('/contactlist').then((response) => {
+        $scope.contactList = response.data;
+      });
+      window.location.reload();
+    }
+
+    $scope.addContact = function () {
+      console.log($scope.contact);
+      $http.post('/contactlist', $scope.contact).then((response) => {
+        console.log(response);
+        refresh();
+      });
+    };
+
+    $scope.remove = function (id) {
+      console.log(id);
+      $http.delete('/contactlist' + id).then(() => {
+        refresh();
+      });
+    };
+
+    $scope.update = function () {
+      console.log($scope.contact._id);
+      http.put('/contactlist/' + $scope.contact._id, $scope.contact).then((response) => {
+        refresh();
+      });
+    };
+
+    $scope.deselect = function () {
+      $scope.contact = '';
+    };
+  },
+]);
