@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="todoApp">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Contact List App</title>
+
+  <link rel="stylesheet" href="bootstrap.css">
+
+  <script src="angular.js"></script>
+  <script src="controllers/controller.js"></script>
+
+</head>
+
+<body>
+<div class="container" ng-controller="AppCtrl">
+  <h1 class="text-center">Todo App</h1>
+
+  <table class="table">
+    <tr>
+      <th class="text-center">Title</th>
+      <th class="text-center">Description</th>
+      <th class="text-center">Due</th>
+      <th class="text-center">Status</th>
+    </tr>
+
+    <tr>
+      <td class="text-center"><input class="form-control text-center" ng-model="todo.title"></td>
+      <td class="text-center"><input class="form-control text-center" ng-model="todo.description"></td>
+      <td class="text-center"><input class="form-control text-center" ng-model="todo.due"></td>
+      <td class="text-center"><input class="form-control text-center" ng-model="todo.status"></td>
+      <td class="text-center">
+        <button class="btn btn-primary" ng-click="addTodo()">Add Todo</button>
+      </td>
+      <td class="text-center">
+        <button class="btn btn-info" ng-click="update()">Update</button>
+        <button class="btn btn-info" ng-click="clear()">Clear</button>
+      </td>
+    </tr>
+
+    <tr ng-repeat="i in todo">
+      <td class="text-center">{{i.title}}</td>
+      <td class="text-center">{{i.description}}</td>
+      <td class="text-center">{{i.due}}</td>
+      <td class="text-center">{{i.status}}</td>
+      <td class="text-center">
+        <button class="btn btn-danger" ng-click="remove(todo._id)">Remove</button>
+      </td>
+      <td class="text-center">
+        <button class="btn btn-warning" ng-click="edit(todo._id)">Edit</button>
+      </td>
+    </tr>
+
+  </table>
+</div>
+</body>
+
+</html>
