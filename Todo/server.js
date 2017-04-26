@@ -3,7 +3,7 @@ const path = require('path');
 const mongojs = require('mongojs');
 const bodyParser = require('body-parser');
 
-const db = mongojs('todo', ['todo']);
+const db = mongojs('todolist', ['todolist']);
 const app = express();
 
 const fullPath = path.join(__dirname, '/public');
@@ -11,46 +11,56 @@ const fullPath = path.join(__dirname, '/public');
 app.use(express.static(fullPath));
 app.use(bodyParser.json());
 
-app.get('/todo/', (request, response) => {
+app.get('/todolist/', (request, response) => {
   console.log('Received a GET request!');
-  db.todo.find((err, docs) => {
+  db.todolist.find((err, docs) => {
     console.log(docs);
     response.json(docs);
   });
 });
-app.post('/todo/', (request, response) => {
+app.post('/todolist/', (request, response) => {
   console.log(request.body);
-  db.todo.save(request.body, (err, docs) => {
+  db.todolist.save(request.body, (err, docs) => {
     response.json(docs);
   });
 });
 
-app.delete('/todo/:id', (request, response) => {
+app.delete('/todolist/:id', (request, response) => {
   const id = request.params.id;
   console.log(id);
-  db.todo.remove({ _id: mongojs.ObjectId(id) }, (err, doc) => {
-    response.json(doc);
-  });
-});
-
-app.get('/todo/:id', (request, response) => {
-  const id = request.params.id;
-  db.todo.findOne({ _id: mongojs.ObjectId(id) }, (err, doc) => {
-    response.json(doc);
-  });
-});
-
-app.put('/todo/:id', (request, response) => {
-  const id = request.params.id;
-  console.log(id);
-  db.todo.findAndModify(
+  db.todolist.remove(
     {
-      query: { _id: mongojs.ObjectId(id) },
+      _id: mongojs.ObjectId(id),
+    },
+    (err, docs) => {
+      response.json(docs);
+    });
+});
+
+app.get('/todolist/:id', (request, response) => {
+  const id = request.params.id;
+  db.todolist.findOne(
+    {
+      _id: mongojs.ObjectId(id),
+    },
+    (err, doc) => {
+      response.json(doc);
+    });
+});
+
+app.put('/todolist/:id', (request, response) => {
+  const id = request.params.id;
+  console.log(id);
+  db.todolist.findAndModify(
+    {
+      query: {
+        _id: mongojs.ObjectId(id),
+      },
       update: {
         $set: {
-          title: request.body.name,
-          description: request.body.email,
-          number: request.body.number,
+          title: request.body.title,
+          text: request.body.text,
+          due: request.body.due,
           status: request.body.status,
         },
       },
@@ -58,8 +68,7 @@ app.put('/todo/:id', (request, response) => {
     },
     (err, doc) => {
       response.json(doc);
-    },
-  );
+    });
 });
 
 app.listen(3000);

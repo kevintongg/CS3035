@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="todoApp">
+<html lang="en" ng-app="myApp">
 
 <head>
   <meta charset="UTF-8">
@@ -14,45 +14,42 @@
 
 <body>
 <div class="container" ng-controller="AppCtrl">
-  <h1 class="text-center">Todo App</h1>
+  <h1 class="text-center">Todo</h1>
 
   <table class="table">
     <tr>
       <th class="text-center">Title</th>
-      <th class="text-center">Description</th>
+      <th class="text-center">Text</th>
       <th class="text-center">Due</th>
       <th class="text-center">Status</th>
+      <th class="text-center">Action</th>
     </tr>
 
     <tr>
-      <td class="text-center"><input class="form-control text-center" ng-model="todo.title"></td>
-      <td class="text-center"><input class="form-control text-center" ng-model="todo.description"></td>
-      <td class="text-center"><input class="form-control text-center" ng-model="todo.due"></td>
-      <td class="text-center"><input class="form-control text-center" ng-model="todo.status"></td>
+      <td><input class="form-control text-center" ng-model="todo.title"></td>
+      <td><input class="form-control text-center" ng-model="todo.text"></td>
+      <td><input class="form-control text-center" ng-model="todo.due"></td>
+      <td/>
       <td class="text-center">
-        <button class="btn btn-primary" ng-click="addTodo()">Add Todo</button>
-      </td>
-      <td class="text-center">
+        <button class="btn btn-primary" ng-click="addContact()">Add Todo</button>
         <button class="btn btn-info" ng-click="update()">Update</button>
         <button class="btn btn-info" ng-click="clear()">Clear</button>
       </td>
     </tr>
 
-    <tr ng-repeat="i in todo">
-      <td class="text-center">{{i.title}}</td>
-      <td class="text-center">{{i.description}}</td>
-      <td class="text-center">{{i.due}}</td>
-      <td class="text-center">{{i.status}}</td>
+    <tr ng-repeat="todos in todoList">
+      <td class="text-center">{{todos.title}}</td>
+      <td class="text-center">{{todos.text}}</td>
+      <td class="text-center">{{todos.due}}</td>
+      <td class="text-center">{{todos.status}}</td>
       <td class="text-center">
-        <button class="btn btn-danger" ng-click="remove(todo._id)">Remove</button>
-      </td>
-      <td class="text-center">
-        <button class="btn btn-warning" ng-click="edit(todo._id)">Edit</button>
+        <button class="btn btn-danger" ng-click="remove(todos._id)">Remove</button>
+        <button class="btn btn-warning" ng-click="edit(todos._id)">Edit</button>
+        <button class="btn btn-info" ng-click="complete(todos._id)">Complete</button>
       </td>
     </tr>
 
   </table>
 </div>
 </body>
-
 </html>

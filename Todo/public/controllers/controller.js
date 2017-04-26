@@ -1,24 +1,24 @@
-const myApp = angular.module('todoApp', []);
+const myApp = angular.module('myApp', []);
 
 myApp.controller('AppCtrl', [
   '$scope',
   '$http',
   function ($scope, $http) {
-    $http.get('/todo/').then((response) => {
-      $scope.todo = response.data;
+    $http.get('/todolist/').then((response) => {
+      $scope.todoList = response.data;
     });
 
     function refresh() {
       console.log('Message from controller');
-      $http.get('/todo/').then((response) => {
-        $scope.todo = response.data;
+      $http.get('/todolist/').then((response) => {
+        $scope.todoList = response.data;
       });
       window.location.reload();
     }
 
-    $scope.addTodo = function () {
+    $scope.addContact = function () {
       console.log($scope.todo);
-      $http.post('/todo/', $scope.todo).then((response) => {
+      $http.post('/todolist/', $scope.todo).then((response) => {
         console.log(response);
         refresh();
       });
@@ -26,7 +26,7 @@ myApp.controller('AppCtrl', [
 
     $scope.remove = function (id) {
       console.log(id);
-      $http.delete('/todo/' + id).then(() => {
+      $http.delete('/todolist/' + id).then(() => {
         refresh();
       });
     };
@@ -34,8 +34,8 @@ myApp.controller('AppCtrl', [
     $scope.update = function () {
       console.log($scope.todo._id);
       $http
-        .put('/todo/' + $scope.todo._id, $scope.todo)
-        .then(() => {
+        .put(`/todolist/${$scope.todo._id}`, $scope.todo)
+        .then((response) => {
           refresh();
         });
     };
@@ -46,7 +46,7 @@ myApp.controller('AppCtrl', [
 
     $scope.edit = function (id) {
       console.log(`ID: ${id}`);
-      $http.get('/todo/' + id).then((response) => {
+      $http.get('/todolist/' + id).then((response) => {
         $scope.todo = response.data;
       });
     };
