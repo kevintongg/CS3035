@@ -81,14 +81,20 @@ app.put('/todolist/:id', (request, response) => {
 });
 
 app.post('/todolist/:status', (request, response) => {
-  db.todolist.update(
+  db.todolist.findAndModify(
     {
-      status: 'Uncomplete',
-    },
-    {
-      $set: {
-        status: 'Complete',
+      query: {
+        status: 'Incomplete',
       },
+      update: {
+        $set: {
+          title: request.body.title,
+          text: request.body.text,
+          due: request.body.due,
+          status: 'Complete',
+        },
+      },
+      new: true,
     },
     (err, doc) => {
       response.json(doc);
