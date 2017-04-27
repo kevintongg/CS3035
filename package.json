@@ -21,6 +21,9 @@
     "type": "git",
     "url": "git+https://github.com/kevintongg/CS3035.git"
   },
+  "scripts": {
+    "start": "node Todo/server.js"
+  },
   "author": "Kevin Tong",
   "license": "ISC",
   "bugs": {

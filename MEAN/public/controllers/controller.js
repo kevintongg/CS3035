@@ -16,7 +16,7 @@ myApp.controller('AppCtrl', [
       window.location.reload();
     }
 
-    $scope.addContact = function () {
+    $scope.addTodo = function () {
       console.log($scope.contact);
       $http.post('/contactlist/', $scope.contact).then((response) => {
         console.log(response);
