@@ -80,6 +80,8 @@ app.put('/todolist/:id', (request, response) => {
     });
 });
 
+app.complete
+
 app.post('/todolist/:status', (request, response) => {
   db.todolist.findAndModify(
     {
