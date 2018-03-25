@@ -4,20 +4,17 @@
  It should be able to handle any n up to 50. If n is greater than 50, the function should print the string "Not available".
  */
 
-console.log("#1");
 function staircase(n) {
-
   if (n > 50) {
-    console.log("Not available.");
-    throw new Error("Not available. Your integer n is greater than 50.");
+    console.log('Not available.');
+    throw new Error('Not available. Your input n is greater than 50.');
   }
 
-  if (n == 1) {
-    console.log("#");
-  }
-  else {
-    for (var i = 0; i <= n; i++) {
-      console.log(" ".repeat(n - i) + "#" + ":".repeat(i));
+  if (n === 1) {
+    console.log('#');
+  } else {
+    for (let i = 0; i <= n; i++) {
+      console.log(' '.repeat(n - i) + '#' + ':'.repeat(i));
     }
   }
 }
